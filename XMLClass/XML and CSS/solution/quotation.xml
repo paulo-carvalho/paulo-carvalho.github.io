@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="quotation.css"?>
+
+<quotation>
+	<quote>
+		<line>"Bark louder because I can't hear you from here."</line>
+		<author>Valesca Popozuda</author>
+		<source type="music">Valesca Popozuda - Beijinho no Ombro</source>
+	</quote>
+	<quote>
+		<line>"Do you believe in live after love?"</line>
+		<author>Cher</author>
+		<source type="music">Cher - Believe</source>
+	</quote>
+	<quote>
+		<line>"If not me, then who? If not now, then when?"</line>
+		<author>Emma Watson</author>
+		<source type="video">Emma Watson UN speech</source>
+	</quote>
+</quotation>
