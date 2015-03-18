@@ -27,4 +27,17 @@ source {
 	font-size: 12pt;
 	text-align: right;
 	color: grey;
+	padding-right: 20px;
+}
+
+source[type=music] {
+	background-image: url("ico/music.png");
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+source[type=video] {
+	background-image: url("ico/video.png");
+	background-repeat: no-repeat;
+	background-position: right;
 }
