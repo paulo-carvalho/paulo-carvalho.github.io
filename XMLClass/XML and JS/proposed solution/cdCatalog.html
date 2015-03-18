@@ -29,10 +29,8 @@
 			}
 
 			function next() {
-				if (i<x.length-1) {
-					i++;
-					displayCD();
-				}
+				(i<x.length-1) ? i++ : i = 0;
+				displayCD();
 			}
 
 			function previous() {
