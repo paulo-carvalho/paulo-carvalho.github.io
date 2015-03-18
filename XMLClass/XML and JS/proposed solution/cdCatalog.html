@@ -12,7 +12,7 @@
 			
 			xmlhttp.open("GET","cdCatalog.xml",false);
 			xmlhttp.send();
-			xmlDoc=xmlhttp.responseXML; 
+			xmlDoc = xmlhttp.responseXML; 
 
 			var x = xmlDoc.getElementsByTagName("CD");
 			
@@ -25,7 +25,7 @@
 						"Artist: " + artist + "<br />" + 
 						"Title: "+ title;
 				
-				document.getElementById("showCD").innerHTML=txt;
+				document.getElementById("showCD").innerHTML = txt;
 			}
 
 			function next() {
@@ -34,10 +34,8 @@
 			}
 
 			function previous() {
-				if (i>0) {
-				  i--;
-				  displayCD();
-				}
+				(i > 0) ? i-- : x.length-1;
+				displayCD();
 			}
 		</script>
 	</head>
@@ -45,7 +43,7 @@
 	<body onload="displayCD()">
 		<div id='showCD'></div>
 		<br />
-		<input type="button" onclick="previous()" value="<< Previous" />
-		<input type="button" onclick="next()" value="Next >>" />
+		<input type="button" onclick="previous()" value="<< Previous CD" />
+		<input type="button" onclick="next()" value="Next CD >>" />
 	</body>
 </html>
