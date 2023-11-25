@@ -1,24 +1,24 @@
 {
   "links": [
     {
-      "title": "Twitter",
-      "icon": "fa-twitter",
-      "url": "https://twitter.com/"
-    },
-    {
       "title": "GitHub",
       "icon": "fa-github",
-      "url": "https://github.com/"
-    },
-    {
-      "title": "Instagram",
-      "icon": "fa-instagram",
-      "url": "https://www.instagram.com/"
+      "url": "https://github.com/paulo-carvalho"
     },
     {
       "title": "LinkedIn",
       "icon": "fa-linkedin",
-      "url": "https://www.linkedin.com/"
+      "url": "https://www.linkedin.com/in/paulohdc"
+    },
+    {
+      "title": "Lattes",
+      "icon": "fa-l",
+      "url": "lattes.cnpq.br/0550111102021838"
+    },
+    {
+      "title": "Beecrowd",
+      "icon": "fa-code",
+      "url": "https://www.beecrowd.com.br/judge/pt/profile/7668"
     }
   ]
 }
