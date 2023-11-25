@@ -1,6 +1,11 @@
 {
   "links": [
     {
+      "title": "E-mail",
+      "icon": "fa-envelope",
+      "url": "mailto:paulocarvalho.ti@pm.me"
+    },
+    {
       "title": "GitHub",
       "icon": "fa-github",
       "url": "https://github.com/paulo-carvalho"
@@ -13,7 +18,7 @@
     {
       "title": "Lattes",
       "icon": "fa-l",
-      "url": "lattes.cnpq.br/0550111102021838"
+      "url": "https://lattes.cnpq.br/0550111102021838"
     },
     {
       "title": "Beecrowd",
