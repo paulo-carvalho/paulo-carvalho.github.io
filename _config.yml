@@ -34,15 +34,8 @@ navigation:
     url: /
   - text: About
     url: /about/
-  - text: Style Guide
-    url: /style-guide/
   - text: Tags
     url: /tags/
-  - text: Download
-    url: /
-
-# The shortname for your Disqus site to enable comments.
-disqus: justgoodthemes
 
 # Colors
 accent_color: '#2d72d9'
