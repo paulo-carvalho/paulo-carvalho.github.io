@@ -1,12 +1,12 @@
 ---
 layout: page
-title: About my career
+title: Paulo Carvalho: A Strategic IT Business Analyst Driving High-Impact Solutions
 description: the page to present my curriculum
 feature_image: images/about.png
 ---
 
-In how many ways can we present ourselves?
+Paulo Carvalho is a highly skilled and results-driven IT Business Analyst with over a decade of experience in strategic roles across diverse industries. His expertise lies in bridging the gap between business needs and technical solutions, ensuring seamless communication and collaboration among stakeholders. Proficient in Agile methodologies, OKRs, and KPIs, Paulo has successfully delivered projects in sectors ranging from cannabis e-commerce and steel manufacturing to automotive pre-sales solutions. His ability to translate complex requirements into actionable user stories, combined with his proficiency in tools like Jira, Azure DevOps, and SQL databases, makes him a valuable asset in driving continuous delivery and process optimization.
 
-Should I describe myself only in a specific way, even tough we are targeting a specific goal?
+Throughout his career, Paulo has demonstrated a strong track record of measurable achievements. At FullStack Labs, working on behalf of Corra Technologies, he achieved a 95% User Story Acceptance Rate by refining requirements through Scrum rituals and maintained a 15% Defect Detection Rate through rigorous smoke testing. His stakeholder management skills were evident when he increased the Net Promoter Score (NPS) from 8.3 to 9 within a single quarter. Additionally, his technical acumen shines through his documentation of GraphQL integrations and process flows using LucidChart. His tenure at ENACOM Group as both a Business Analyst and Scrum Master further highlights his versatility—managing multiple B2B projects, reducing team downtime by 33%, and fostering a product-centric culture using low-code tools like Miro and Microsoft Visio.
 
-Can we do it more creative?
+Beyond his professional accomplishments, Paulo is committed to continuous learning and skill development. Holding certifications in Business Intelligence, Business Model Canvas, and Scrum, he stays at the forefront of industry best practices. Fluent in Portuguese and English, with intermediate proficiency in Mandarin and basic Italian, Paulo’s global mindset enhances his ability to work in multicultural environments. His academic background, including post-graduate studies in IT Governance and a Bachelor’s in Computer Information Systems, further solidifies his technical and analytical foundation. Paulo Carvalho is not just a Business Analyst—he is a strategic partner who delivers value, innovation, and efficiency to every project he undertakes.
