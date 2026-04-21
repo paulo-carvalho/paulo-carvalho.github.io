@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Perfil de Poço Tubular | ABNT</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --navy: #1a3050;
+  --navy-mid: #254470;
+  --navy-light: #3a6090;
+  --accent: #d4740a;
+  --accent-light: #f09030;
+  --bg: #edf1f7;
+  --surface: #ffffff;
+  --surface2: #f5f8fc;
+  --border: #ccd8e8;
+  --text: #1a2638;
+  --text2: #4a6080;
+  --text3: #8090a8;
+  --success: #1a7a44;
+  --danger: #c02020;
+  --r: 8px;
+  --shadow: 0 2px 10px rgba(26,48,80,0.12);
+  --shadow-lg: 0 6px 24px rgba(26,48,80,0.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+
+/* ===== HEADER ===== */
+.app-header{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
+  color:#fff;padding:10px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 12px rgba(0,0,0,0.25);
+}
+.header-brand{display:flex;flex-direction:column;}
+.app-title{font-size:13px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;line-height:1.2;}
+.app-sub{font-size:10px;opacity:0.65;font-family:monospace;letter-spacing:0.3px;}
+.header-btns{display:flex;gap:6px;align-items:center;}
+.hbtn{padding:6px 10px;border-radius:5px;border:none;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.15s;white-space:nowrap;}
+.hbtn-outline{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.3);}
+.hbtn-outline:hover{background:rgba(255,255,255,0.22);}
+.hbtn-accent{background:var(--accent);color:#fff;}
+.hbtn-accent:hover{background:var(--accent-light);}
+
+/* ===== LAYOUT ===== */
+.app-layout{display:flex;flex-direction:column;min-height:calc(100dvh - 47px);}
+@media(min-width:1080px){
+  .app-layout{flex-direction:row;}
+  .form-panel{width:420px;min-width:380px;max-width:460px;flex-shrink:0;}
+  .diagram-panel{flex:1;overflow-y:auto;}
+}
+
+/* ===== TABS ===== */
+.tabs-nav{
+  display:flex;overflow-x:auto;
+  background:var(--navy-mid);
+  scrollbar-width:none;position:sticky;top:47px;z-index:100;
+}
+.tabs-nav::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex-shrink:0;padding:9px 13px;border:none;
+  background:transparent;color:rgba(255,255,255,0.55);
+  font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;
+  border-bottom:2.5px solid transparent;transition:all 0.18s;
+  letter-spacing:0.4px;text-transform:uppercase;
+}
+.tab-btn.active{color:#fff;border-bottom-color:var(--accent-light);}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,0.85);}
+
+/* ===== FORM PANEL ===== */
+.form-panel{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.form-content{flex:1;overflow-y:auto;padding:14px;background:var(--surface);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ===== FORM ELEMENTS ===== */
+.fsec{margin-bottom:18px;}
+.fsec-title{
+  font-size:10.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--accent);
+  margin-bottom:8px;padding-bottom:5px;
+  border-bottom:1.5px solid var(--border);
+}
+.frow{display:grid;gap:8px;margin-bottom:8px;}
+.frow-1{grid-template-columns:1fr;}
+.frow-2{grid-template-columns:1fr 1fr;}
+.frow-3{grid-template-columns:1fr 1fr 1fr;}
+.frow-4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.fgrp{display:flex;flex-direction:column;gap:3px;}
+.fgrp label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;}
+.fgrp input,.fgrp select,.fgrp textarea{
+  padding:7px 9px;border:1.5px solid var(--border);border-radius:5px;
+  font-size:13px;color:var(--text);background:var(--surface2);
+  transition:border-color 0.15s,background 0.15s;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+.fgrp select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6080'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;}
+.fgrp input:focus,.fgrp select:focus,.fgrp textarea:focus{
+  outline:none;border-color:var(--navy-light);background:#fff;
+}
+.fgrp input[type="color"]{padding:2px 3px;height:34px;cursor:pointer;}
+.fgrp textarea{resize:vertical;min-height:60px;}
+.fhelp{font-size:10px;color:var(--text3);font-style:italic;}
+
+/* ===== CARD ===== */
+.card{border:1.5px solid var(--border);border-radius:var(--r);padding:11px;margin-bottom:9px;background:var(--surface2);}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.card-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.6px;}
+.btn-remove{background:none;border:none;color:var(--danger);cursor:pointer;font-size:17px;line-height:1;padding:0 4px;opacity:0.7;transition:opacity 0.15s;}
+.btn-remove:hover{opacity:1;}
+.btn-add{
+  width:100%;padding:9px;background:var(--bg);
+  border:1.5px dashed var(--border);border-radius:var(--r);
+  color:var(--text2);cursor:pointer;font-size:12px;font-weight:600;
+  transition:all 0.15s;margin-top:4px;letter-spacing:0.3px;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.btn-add:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* ===== BOTTOM BAR ===== */
+.bottom-bar{
+  position:sticky;bottom:0;
+  background:var(--surface);border-top:1.5px solid var(--border);
+  padding:10px 14px;display:flex;gap:8px;
+  box-shadow:0 -3px 10px rgba(0,0,0,0.08);z-index:100;
+}
+.btn-pdf{
+  flex:1;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
+  color:#fff;border:none;padding:11px;border-radius:7px;
+  font-size:13px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:all 0.18s;letter-spacing:0.3px;
+  box-shadow:0 2px 8px rgba(26,48,80,0.3);
+}
+.btn-pdf:hover{filter:brightness(1.12);}
+.btn-pdf:active{transform:scale(0.98);}
+.btn-pdf:disabled{opacity:0.6;pointer-events:none;}
+.btn-save{
+  background:var(--surface2);color:var(--text);
+  border:1.5px solid var(--border);padding:11px 13px;
+  border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;
+  transition:all 0.15s;
+}
+.btn-save:hover{background:var(--bg);border-color:var(--navy-light);}
+
+/* ===== DIAGRAM PANEL ===== */
+.diagram-panel{
+  padding:14px;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;
+  min-height:350px;
+}
+.diagram-top{
+  width:100%;max-width:600px;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;
+}
+.diagram-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);}
+.diagram-well-id{font-size:12px;font-weight:700;color:var(--navy);font-family:monospace;}
+.diagram-box{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:var(--r);overflow:hidden;width:100%;max-width:600px;
+  box-shadow:var(--shadow-lg);
+}
+#well-svg{width:100%;display:block;}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);
+  background:var(--navy);color:#fff;padding:9px 18px;
+  border-radius:20px;font-size:12px;font-weight:600;
+  z-index:9999;opacity:0;transition:opacity 0.25s,transform 0.25s;
+  pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== INFO CHIP ===== */
+.chip{
+  display:inline-block;padding:2px 7px;border-radius:10px;
+  font-size:10px;font-weight:700;letter-spacing:0.3px;
+  background:var(--bg);color:var(--text2);border:1px solid var(--border);
+}
+.chip-blue{background:#e0ecff;color:#2050a0;border-color:#b0cce8;}
+
+/* ===== ABNT badge ===== */
+.abnt-note{
+  background:#f0f6e8;border:1px solid #b8d8a0;border-radius:5px;
+  padding:7px 9px;font-size:10.5px;color:#2a5010;margin-top:8px;
+}
+.abnt-note strong{color:#1a4008;}
+
+/* ===== SPINNER ===== */
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+
+/* ===== RESPONSIVE adjustments ===== */
+@media(max-width:480px){
+  .frow-3,.frow-4{grid-template-columns:1fr 1fr;}
+  .header-btns .hbtn span{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-brand">
+    <div class="app-title">⛽ Perfil de Poço Tubular</div>
+    <div class="app-sub">ABNT NBR 12212 · 12244 · 13604 · SIAGAS · CNARH</div>
+  </div>
+  <div class="header-btns">
+    <button class="hbtn hbtn-outline" onclick="exportJSON()" title="Exportar dados JSON">
+      <span>&#8595;</span> JSON
+    </button>
+    <label class="hbtn hbtn-outline" style="cursor:pointer" title="Importar dados JSON">
+      <span>&#8593;</span> JSON
+      <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
+    </label>
+  </div>
+</div>
+
+<div class="app-layout">
+  <!-- ===== FORM PANEL ===== -->
+  <div class="form-panel">
+    <div class="tabs-nav" id="tabs-nav">
+      <button class="tab-btn active" data-tab="tab-ident">1. Identificação</button>
+      <button class="tab-btn" data-tab="tab-loc">2. Localização</button>
+      <button class="tab-btn" data-tab="tab-const">3. Construtivo</button>
+      <button class="tab-btn" data-tab="tab-litho">4. Litologias</button>
+      <button class="tab-btn" data-tab="tab-hydro">5. Hidrogeol. & Outorga</button>
+    </div>
+
+    <div class="form-content">
+
+      <!-- TAB 1: IDENTIFICAÇÃO -->
+      <div class="tab-panel active" id="tab-ident">
+        <div class="fsec">
+          <div class="fsec-title">Requerente</div>
+          <div class="frow frow-1"><div class="fgrp"><label>Nome / Razão Social</label><input data-path="requerente.nome" placeholder="Ex.: Instituto Viver em Transformação"></div></div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>CNPJ / CPF</label><input data-path="requerente.cnpj" placeholder="00.000.000/0000-00"></div>
+            <div class="fgrp"><label>Responsável</label><input data-path="requerente.responsavel" placeholder="Nome do responsável"></div>
+          </div>
+          <div class="frow frow-1"><div class="fgrp"><label>Endereço</label><input data-path="requerente.endereco" placeholder="Rua, número, bairro"></div></div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Telefone</label><input data-path="requerente.telefone" placeholder="(00) 00000-0000"></div>
+            <div class="fgrp"><label>E-mail</label><input data-path="requerente.email" type="email" placeholder="email@dominio.com.br"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Empresa Executora</div>
+          <div class="frow frow-1"><div class="fgrp"><label>Empresa Perfuradora</label><input data-path="siagas.empresaPerfuradora" placeholder="Razão social da empresa"></div></div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>CNPJ da Empresa</label><input data-path="siagas.cnpjEmpresa" placeholder="00.000.000/0000-00"></div>
+            <div class="fgrp"><label>Responsável Técnico (RT)</label><input data-path="siagas.responsavelTecnico" placeholder="Nome do engenheiro/geólogo"></div>
+          </div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>CREA / CRG</label><input data-path="siagas.crea" placeholder="CREA-MT 000000"></div>
+            <div class="fgrp"><label>Data Início</label><input data-path="poco.dataInicio" type="date"></div>
+            <div class="fgrp"><label>Data Término</label><input data-path="poco.dataTermino" type="date"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Método de Perfuração</label>
+              <select data-path="poco.metodoPerfuracao">
+                <option value="rotativo_ar">Rotativo a ar comprimido</option>
+                <option value="rotativo_agua">Rotativo a fluido (água)</option>
+                <option value="rotativo_lama">Rotativo a lama</option>
+                <option value="percussao">Percussão</option>
+                <option value="rotopercussao">Roto-percussão</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="fgrp"><label>ART/RRT Nº</label><input data-path="siagas.artNumero" placeholder="000000000000000"></div>
+          </div>
+        </div>
+
+        <div class="abnt-note">
+          <strong>Normas de referência:</strong> ABNT NBR 12212 (Projeto), ABNT NBR 12244 (Construção), ABNT NBR 13604 (Filtros/Revestimentos PVC), SIAGAS (CPRM), CNARH (ANA).
+        </div>
+      </div>
+
+      <!-- TAB 2: LOCALIZAÇÃO -->
+      <div class="tab-panel" id="tab-loc">
+        <div class="fsec">
+          <div class="fsec-title">Identificação do Poço</div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Código / Nome do Poço</label><input data-path="poco.codigo" placeholder="PT01"></div>
+            <div class="fgrp"><label>Finalidade de Uso</label>
+              <select data-path="poco.finalidade">
+                <option value="abastecimento_humano">Abastecimento humano</option>
+                <option value="abastecimento_industrial">Abastecimento industrial</option>
+                <option value="irrigacao">Irrigação agrícola</option>
+                <option value="dessedentacao">Dessedentação animal</option>
+                <option value="mineracao">Mineração</option>
+                <option value="termal">Lazer / Termal</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Município</label><input data-path="requerente.municipio" placeholder="Várzea Grande"></div>
+            <div class="fgrp"><label>Estado (UF)</label>
+              <select data-path="requerente.uf" id="uf-select">
+                <option value="">Selecione...</option>
+                <option value="AC">Acre</option><option value="AL">Alagoas</option><option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option><option value="BA">Bahia</option><option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option><option value="MA">Maranhão</option><option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option><option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option><option value="PB">Paraíba</option><option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option><option value="PI">Piauí</option><option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option><option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option><option value="RR">Roraima</option><option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow frow-1"><div class="fgrp"><label>Logradouro / Localidade</label><input data-path="poco.localidade" placeholder="Endereço ou localidade do poço"></div></div>
+          <div class="frow frow-1"><div class="fgrp"><label>Proprietário do Terreno</label><input data-path="poco.proprietario" placeholder="Nome do proprietário (se diferente do requerente)"></div></div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Coordenadas Geográficas</div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Datum</label>
+              <select data-path="poco.datum">
+                <option value="SIRGAS2000">SIRGAS 2000</option>
+                <option value="WGS84">WGS 84</option>
+                <option value="SAD69">SAD 69</option>
+                <option value="CorrentesBR">Corrientes-BR</option>
+              </select>
+            </div>
+            <div class="fgrp"><label>Fuso UTM</label><input data-path="poco.fusoUtm" placeholder="Ex.: 21S"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Latitude (DD)</label><input data-path="poco.latitude" placeholder="-15.6500000" step="any" type="number"></div>
+            <div class="fgrp"><label>Longitude (DD)</label><input data-path="poco.longitude" placeholder="-56.1300000" step="any" type="number"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Coord. E (UTM)</label><input data-path="poco.coordE" placeholder="Ex.: 590000"></div>
+            <div class="fgrp"><label>Coord. N (UTM)</label><input data-path="poco.coordN" placeholder="Ex.: 8230000"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Altitude (m)</label><input data-path="poco.altitude" placeholder="Ex.: 142" type="number"></div>
+            <div class="fgrp"><label>Bacia Hidrográfica</label><input data-path="poco.bacia" placeholder="Ex.: Cuiabá"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Dados de Outorga</div>
+          <div id="outorga-authority" class="chip chip-blue" style="margin-bottom:8px;"></div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Nº do Processo</label><input data-path="outorga.numeroProcesso" placeholder="000000/0000"></div>
+            <div class="fgrp"><label>Data de Validade</label><input data-path="outorga.dataValidade" type="date"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Nº CNARH</label><input data-path="outorga.numeroCnarh" placeholder="Código CNARH"></div>
+            <div class="fgrp"><label>Tipo de Outorga</label>
+              <select data-path="outorga.tipo">
+                <option value="declaracao_uso">Declaração de Uso Insignificante</option>
+                <option value="outorga_preventiva">Outorga Preventiva</option>
+                <option value="outorga_direito">Outorga de Direito de Uso</option>
+                <option value="regularizacao">Regularização</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow frow-1"><div class="fgrp"><label>Observações sobre a Outorga</label><textarea data-path="outorga.obs" placeholder="Legislação estadual aplicável, condicionantes, etc."></textarea></div></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: CONSTRUTIVO (items 5-9) -->
+      <div class="tab-panel" id="tab-const">
+        <div class="fsec">
+          <div class="fsec-title">Profundidade Total</div>
+          <div class="frow frow-2">
+            <div class="fgrp">
+              <label>Profundidade Total (m)</label>
+              <input data-path="poco.profundidadeTotal" type="number" min="5" max="5000" placeholder="100">
+            </div>
+            <div class="fgrp"><label>Diâmetro Final</label><input data-path="poco.diametroFinal" placeholder='Ex.: 6.1/8"'></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">5 · Laje de Proteção Sanitária</div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Espessura (m)</label><input data-path="construtivo.laje.espessura" type="number" step="0.01" placeholder="0.10"></div>
+            <div class="fgrp"><label>Largura (m)</label><input data-path="construtivo.laje.largura" type="number" step="0.1" placeholder="1.0"></div>
+            <div class="fgrp"><label>Comprimento (m)</label><input data-path="construtivo.laje.comprimento" type="number" step="0.1" placeholder="1.0"></div>
+          </div>
+          <div class="frow frow-1"><div class="fgrp"><label>Material</label><input data-path="construtivo.laje.material" placeholder="Ex.: Concreto armado fck=25MPa"></div></div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">6 · Perfuração – Fase 1</div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Diâmetro (bit)</label><input data-path="construtivo.perfuracao1.diametro" placeholder='8.1/2"'></div>
+            <div class="fgrp"><label>De (m)</label><input data-path="construtivo.perfuracao1.de" type="number" placeholder="0" min="0"></div>
+            <div class="fgrp"><label>Até (m)</label><input data-path="construtivo.perfuracao1.ate" type="number" placeholder="40" min="0"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">7 · Cimentação</div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Tipo de Cimento</label><input data-path="construtivo.cimentacao.tipo" placeholder="Ex.: Portland CP-II-32"></div>
+            <div class="fgrp"><label>De (m)</label><input data-path="construtivo.cimentacao.de" type="number" placeholder="0" min="0"></div>
+            <div class="fgrp"><label>Até (m)</label><input data-path="construtivo.cimentacao.ate" type="number" placeholder="40" min="0"></div>
+          </div>
+          <div class="frow frow-1"><div class="fgrp"><label>Proporção (traço)</label><input data-path="construtivo.cimentacao.traco" placeholder="Ex.: 1:1 cimento:água em peso"></div></div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">8 · Revestimento – Fase 1</div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Diâmetro (Ø)</label><input data-path="construtivo.revestimento.diametro" placeholder='6"'></div>
+            <div class="fgrp"><label>De (m)</label><input data-path="construtivo.revestimento.de" type="number" placeholder="0" min="0"></div>
+            <div class="fgrp"><label>Até (m)</label><input data-path="construtivo.revestimento.ate" type="number" placeholder="40" min="0"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Material (NBR 13604)</label>
+              <select data-path="construtivo.revestimento.material">
+                <option value="pvc_tigre">PVC Tigre / CRPVC</option>
+                <option value="pvc_branco">PVC Branco</option>
+                <option value="aco_inox">Aço Inoxidável</option>
+                <option value="aco_carbono">Aço Carbono</option>
+                <option value="fibra">Fibra de Vidro</option>
+              </select>
+            </div>
+            <div class="fgrp"><label>Espessura de Parede (mm)</label><input data-path="construtivo.revestimento.espessuraParede" placeholder="Ex.: 7.5"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">9 · Perfuração – Fase 2</div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Diâmetro (bit)</label><input data-path="construtivo.perfuracao2.diametro" placeholder='6.1/8"'></div>
+            <div class="fgrp"><label>De (m)</label><input data-path="construtivo.perfuracao2.de" type="number" placeholder="40" min="0"></div>
+            <div class="fgrp"><label>Até (m)</label><input data-path="construtivo.perfuracao2.ate" type="number" placeholder="100" min="0"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Filtros / Pré-filtro (ABNT NBR 13604)</div>
+          <div id="filtros-list"></div>
+          <button class="btn-add" onclick="addFiltro()">＋ Adicionar Intervalo de Filtro</button>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">10 · Tubulação Edutora & 11 · Bomba Submersa</div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Ø Tubulação Edutora</label><input data-path="construtivo.bomba.diametroEdutora" placeholder='Ex.: 2"'></div>
+            <div class="fgrp"><label>Profundidade Bomba (m)</label><input data-path="construtivo.bomba.profundidade" type="number" placeholder="80" min="0"></div>
+            <div class="fgrp"><label>Material Edutora</label>
+              <select data-path="construtivo.bomba.materialEdutora">
+                <option value="pvc">PVC</option>
+                <option value="aco_galv">Aço Galvanizado</option>
+                <option value="aco_inox">Aço Inoxidável</option>
+                <option value="pead">PEAD</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Modelo / Fabricante</label><input data-path="construtivo.bomba.modelo" placeholder="Ex.: Grundfos SP10-3"></div>
+            <div class="fgrp"><label>Potência (CV/kW)</label><input data-path="construtivo.bomba.potencia" placeholder="Ex.: 2CV"></div>
+            <div class="fgrp"><label>Vazão da Bomba (m³/h)</label><input data-path="construtivo.bomba.vazaoBomba" placeholder="Ex.: 5.0"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: LITOLOGIAS -->
+      <div class="tab-panel" id="tab-litho">
+        <div class="fsec">
+          <div class="fsec-title">Perfil Litológico</div>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">
+            Descreva as camadas geológicas identificadas durante a perfuração. As cores aparecem no diagrama e no PDF.
+          </p>
+          <div id="litho-list"></div>
+          <button class="btn-add" onclick="addLitho()">＋ Adicionar Camada</button>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Observações Litológicas</div>
+          <div class="frow frow-1"><div class="fgrp"><label>Notas do Geólogo / Técnico</label><textarea data-path="poco.obsLitologicas" placeholder="Observações gerais sobre as litologias encontradas, estruturas geológicas, mineralogia, etc." rows="4"></textarea></div></div>
+        </div>
+      </div>
+
+      <!-- TAB 5: HIDROGEOLOGIA & OUTORGA -->
+      <div class="tab-panel" id="tab-hydro">
+        <div class="fsec">
+          <div class="fsec-title">Dados Hidrogeológicos</div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Nível Estático (m)</label><input data-path="hidrogeologia.nivelEstatico" type="number" step="0.01" placeholder="Ex.: 12.50"></div>
+            <div class="fgrp"><label>Nível Dinâmico (m)</label><input data-path="hidrogeologia.nivelDinamico" type="number" step="0.01" placeholder="Ex.: 45.20"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Vazão de Teste (m³/h)</label><input data-path="hidrogeologia.vazaoTeste" type="number" step="0.1" placeholder="Ex.: 8.4"></div>
+            <div class="fgrp"><label>Vazão Específica (m³/h/m)</label><input data-path="hidrogeologia.vazaoEspecifica" type="number" step="0.001" placeholder="calculado"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Rebaixamento (m)</label><input data-path="hidrogeologia.rebaixamento" type="number" step="0.01" placeholder="calculado"></div>
+            <div class="fgrp"><label>Duração do Teste (h)</label><input data-path="hidrogeologia.duracaoTeste" type="number" step="0.5" placeholder="Ex.: 24"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Transmissividade (m²/s)</label><input data-path="hidrogeologia.transmissividade" placeholder="Ex.: 1.2e-4"></div>
+            <div class="fgrp"><label>Condutividade Hidráulica (m/s)</label><input data-path="hidrogeologia.condutividade" placeholder="Ex.: 5.0e-6"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Sistema Aquífero (SIAGAS)</div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Sistema Aquífero</label>
+              <select data-path="hidrogeologia.sistemaAquifero">
+                <option value="">Indefinido</option>
+                <option value="Guarani">Sistema Aquífero Guarani (SAG)</option>
+                <option value="Alter do Chao">Alter do Chão</option>
+                <option value="Bauru">Bauru</option>
+                <option value="Caiua">Caiuá</option>
+                <option value="Serra Geral">Serra Geral</option>
+                <option value="Parana">Paraná</option>
+                <option value="Furnas">Furnas</option>
+                <option value="Cristalino">Cristalino (Fissural)</option>
+                <option value="Cuiaba">Grupo Cuiabá</option>
+                <option value="Fraturado">Fraturado / Fissural Local</option>
+                <option value="Livre">Aquífero Livre (Sedimentos)</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="fgrp"><label>Tipo de Aquífero</label>
+              <select data-path="hidrogeologia.tipoAquifero">
+                <option value="livre">Livre (freático)</option>
+                <option value="semiconfinado">Semiconfinado</option>
+                <option value="confinado">Confinado (artesiano)</option>
+                <option value="artesiano_jorrante">Artesiano jorrante</option>
+                <option value="fraturado">Fissural/fraturado</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>pH da Água</label><input data-path="hidrogeologia.ph" type="number" step="0.1" placeholder="Ex.: 6.8"></div>
+            <div class="fgrp"><label>Temperatura da Água (°C)</label><input data-path="hidrogeologia.temperatura" type="number" step="0.1" placeholder="Ex.: 22.5"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Condutividade Elétrica (µS/cm)</label><input data-path="hidrogeologia.condutividadeEletrica" placeholder="Ex.: 145"></div>
+            <div class="fgrp"><label>STD (mg/L)</label><input data-path="hidrogeologia.std" placeholder="Ex.: 98"></div>
+          </div>
+          <div class="frow frow-1"><div class="fgrp"><label>Uso pretendido da água</label>
+            <select data-path="hidrogeologia.usoAgua">
+              <option value="consumo_humano">Consumo humano</option>
+              <option value="irrigacao">Irrigação</option>
+              <option value="industria">Uso industrial</option>
+              <option value="dessedentacao">Dessedentação animal</option>
+              <option value="aquicultura">Aquicultura</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div></div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Vazão Outorgada & CNARH</div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Vazão Outorgada (m³/h)</label><input data-path="outorga.vazaoOutorgada" type="number" step="0.1" placeholder="Ex.: 5.0"></div>
+            <div class="fgrp"><label>Volume Diário (m³/dia)</label><input data-path="outorga.volumeDiario" type="number" step="0.1" placeholder="Ex.: 60.0"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Volume Anual (m³/ano)</label><input data-path="outorga.volumeAnual" type="number" step="1" placeholder="Ex.: 21900"></div>
+            <div class="fgrp"><label>Horas de Bombeamento/dia</label><input data-path="outorga.horasBombeamento" type="number" step="0.5" placeholder="Ex.: 12"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-title">Código SIAGAS / Identificação</div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Código SIAGAS</label><input data-path="siagas.codigoPoco" placeholder="Ex.: 1300100100000"></div>
+            <div class="fgrp"><label>Situação do Poço</label>
+              <select data-path="siagas.situacao">
+                <option value="ativo">Ativo</option>
+                <option value="inativo">Inativo</option>
+                <option value="abandonado">Abandonado</option>
+                <option value="tampado">Tampado / Selado</option>
+                <option value="em_perfuracao">Em perfuração</option>
+                <option value="em_teste">Em teste</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Nº Inventário Estadual</label><input data-path="siagas.inventarioEstadual" placeholder="Número no cadastro estadual"></div>
+            <div class="fgrp"><label>Proprietário do Poço</label>
+              <select data-path="siagas.tipoPropietario">
+                <option value="particular">Particular</option>
+                <option value="municipal">Município</option>
+                <option value="estadual">Estado</option>
+                <option value="federal">Federal</option>
+                <option value="empresa">Empresa privada</option>
+                <option value="ong">ONG / Assoc.</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .form-content -->
+
+    <div class="bottom-bar">
+      <button class="btn-save" onclick="saveToast()">💾 Salvar</button>
+      <button class="btn-pdf" id="pdf-btn" onclick="generatePDF()">
+        <span id="pdf-icon">📄</span> Gerar Relatório PDF (ABNT)
+      </button>
+    </div>
+  </div><!-- .form-panel -->
+
+  <!-- ===== DIAGRAM PANEL ===== -->
+  <div class="diagram-panel">
+    <div class="diagram-top">
+      <div class="diagram-label">⬛ Perfil Construtivo – Prévia</div>
+      <div class="diagram-well-id" id="diagram-well-id">PT01</div>
+    </div>
+    <div class="diagram-box">
+      <svg id="well-svg" viewBox="0 0 560 720" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+  </div>
+</div><!-- .app-layout -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DEFAULT STATE
+// ============================================================
+const defaultState = {
+  requerente: {
+    nome: 'INSTITUTO VIVER EM TRANSFORMAÇÃO',
+    cnpj: '24.648.916/0001-10',
+    responsavel: '',
+    endereco: '',
+    municipio: 'Várzea Grande',
+    uf: 'MT',
+    telefone: '',
+    email: ''
+  },
+  poco: {
+    codigo: 'PT01, 02 e 03',
+    profundidadeTotal: 100,
+    diametroFinal: '6.1/8"',
+    finalidade: 'abastecimento_humano',
+    localidade: '',
+    proprietario: '',
+    datum: 'SIRGAS2000',
+    fusoUtm: '21S',
+    latitude: '',
+    longitude: '',
+    coordE: '',
+    coordN: '',
+    altitude: '',
+    bacia: '',
+    dataInicio: '',
+    dataTermino: '',
+    metodoPerfuracao: 'rotativo_ar',
+    obsLitologicas: ''
+  },
+  construtivo: {
+    laje: { espessura: 0.10, largura: 1.0, comprimento: 1.0, material: 'Concreto armado fck=25MPa' },
+    perfuracao1: { diametro: '8.1/2"', de: 0, ate: 40 },
+    cimentacao: { tipo: 'Portland CP-II-32', de: 0, ate: 40, traco: '1:1 cimento:água em peso' },
+    revestimento: { diametro: '6"', de: 0, ate: 40, material: 'pvc_tigre', espessuraParede: '7.5' },
+    perfuracao2: { diametro: '6.1/8"', de: 40, ate: 100 },
+    filtros: [],
+    bomba: {
+      profundidade: 80,
+      diametroEdutora: '2"',
+      materialEdutora: 'pvc',
+      modelo: '',
+      potencia: '',
+      vazaoBomba: ''
+    }
+  },
+  litologias: [
+    { de: 0, ate: 36, descricao: 'Solo alaranjado, escuro, areno-argiloso', cor: '#c8834a' },
+    { de: 36, ate: 100, descricao: 'Rochas do Grupo Cuiabá', cor: '#8b9bb5' }
+  ],
+  hidrogeologia: {
+    nivelEstatico: '',
+    nivelDinamico: '',
+    vazaoTeste: '',
+    vazaoEspecifica: '',
+    rebaixamento: '',
+    duracaoTeste: '',
+    transmissividade: '',
+    condutividade: '',
+    sistemaAquifero: 'Cuiaba',
+    tipoAquifero: 'fraturado',
+    ph: '',
+    temperatura: '',
+    condutividadeEletrica: '',
+    std: '',
+    usoAgua: 'consumo_humano'
+  },
+  outorga: {
+    numeroProcesso: '',
+    dataValidade: '',
+    numeroCnarh: '',
+    tipo: 'outorga_direito',
+    vazaoOutorgada: '',
+    volumeDiario: '',
+    volumeAnual: '',
+    horasBombeamento: '',
+    obs: ''
+  },
+  siagas: {
+    codigoPoco: '',
+    situacao: 'ativo',
+    inventarioEstadual: '',
+    tipoPropietario: 'particular',
+    empresaPerfuradora: '',
+    cnpjEmpresa: '',
+    responsavelTecnico: '',
+    crea: '',
+    artNumero: ''
+  }
+};
+
+// State loaded from localStorage or default
+let state = loadState();
+
+// ============================================================
+// STATE MANAGEMENT
+// ============================================================
+function loadState() {
+  try {
+    const saved = localStorage.getItem('poco_tubular_state_v2');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return deepMerge(defaultState, parsed);
+    }
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(defaultState));
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('poco_tubular_state_v2', JSON.stringify(state));
+  } catch(e) {}
+}
+
+function deepMerge(target, source) {
+  const result = Object.assign({}, target);
+  for (const key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      result[key] = deepMerge(target[key] || {}, source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  }
+  return result;
+}
+
+function getPath(obj, path) {
+  return path.split('.').reduce((o, k) => o && o[k] !== undefined ? o[k] : '', obj);
+}
+
+function setPath(obj, path, value) {
+  const keys = path.split('.');
+  const last = keys.pop();
+  const target = keys.reduce((o, k) => o[k] = o[k] || {}, obj);
+  target[last] = value;
+}
+
+// ============================================================
+// FORM BINDING
+// ============================================================
+function bindInputs() {
+  document.querySelectorAll('[data-path]').forEach(el => {
+    const path = el.dataset.path;
+    const val = getPath(state, path);
+    if (el.tagName === 'SELECT') {
+      el.value = val || '';
+    } else {
+      el.value = val !== undefined && val !== null ? val : '';
+    }
+    el.addEventListener('input', () => {
+      let v = el.value;
+      if (el.type === 'number' && v !== '') v = parseFloat(v);
+      setPath(state, path, v);
+      saveState();
+      updateDiagram();
+      updateOutorgaAuthority();
+    });
+    el.addEventListener('change', () => {
+      let v = el.value;
+      if (el.type === 'number' && v !== '') v = parseFloat(v);
+      setPath(state, path, v);
+      saveState();
+      updateDiagram();
+      updateOutorgaAuthority();
+    });
+  });
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ============================================================
+// FILTROS (dynamic list)
+// ============================================================
+function renderFiltros() {
+  const container = document.getElementById('filtros-list');
+  container.innerHTML = '';
+  (state.construtivo.filtros || []).forEach((f, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-label">Filtro ${i+1}</span>
+        <button class="btn-remove" onclick="removeFiltro(${i})">×</button>
+      </div>
+      <div class="frow frow-3">
+        <div class="fgrp"><label>De (m)</label><input type="number" value="${f.de||''}" onchange="updateFiltro(${i},'de',this.value)" placeholder="50"></div>
+        <div class="fgrp"><label>Até (m)</label><input type="number" value="${f.ate||''}" onchange="updateFiltro(${i},'ate',this.value)" placeholder="70"></div>
+        <div class="fgrp"><label>Tipo</label>
+          <select onchange="updateFiltro(${i},'tipo',this.value)">
+            <option value="ranhurado"${f.tipo==='ranhurado'?' selected':''}>Ranhurado</option>
+            <option value="wire_wrap"${f.tipo==='wire_wrap'?' selected':''}>Wire-wrap</option>
+            <option value="ponte"${f.tipo==='ponte'?' selected':''}>Ponte</option>
+            <option value="balonete"${f.tipo==='balonete'?' selected':''}>Balonete</option>
+            <option value="pre_filtro"${f.tipo==='pre_filtro'?' selected':''}>Pré-filtro (cascalho)</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow frow-2">
+        <div class="fgrp"><label>Diâm. Filtro</label><input value="${f.diametro||''}" onchange="updateFiltro(${i},'diametro',this.value)" placeholder='Ex.: 4"'></div>
+        <div class="fgrp"><label>Abertura ranhura (mm)</label><input type="number" step="0.1" value="${f.abertura||''}" onchange="updateFiltro(${i},'abertura',this.value)" placeholder="Ex.: 0.5"></div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function addFiltro() {
+  const depth = Number(state.poco.profundidadeTotal) || 100;
+  state.construtivo.filtros.push({ de: depth - 20, ate: depth - 5, tipo: 'ranhurado', diametro: '4"', abertura: '0.5' });
+  saveState(); renderFiltros(); updateDiagram();
+}
+
+function removeFiltro(i) {
+  state.construtivo.filtros.splice(i, 1);
+  saveState(); renderFiltros(); updateDiagram();
+}
+
+function updateFiltro(i, field, value) {
+  if (field === 'de' || field === 'ate' || field === 'abertura') value = parseFloat(value) || 0;
+  state.construtivo.filtros[i][field] = value;
+  saveState(); updateDiagram();
+}
+
+// ============================================================
+// LITOLOGIAS (dynamic list)
+// ============================================================
+const LITHO_COLORS = ['#c8834a','#8b9bb5','#d4c47a','#7a9b6e','#c4a870','#9b8bb0','#7ab0c4','#b0b0b0','#a07850','#c0a888'];
+
+function renderLithos() {
+  const container = document.getElementById('litho-list');
+  container.innerHTML = '';
+  (state.litologias || []).forEach((l, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-label" style="display:flex;align-items:center;gap:6px;">
+          <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${l.cor||'#ccc'};border:1px solid #ccc;"></span>
+          Camada ${i+1}
+        </span>
+        <button class="btn-remove" onclick="removeLitho(${i})">×</button>
+      </div>
+      <div class="frow frow-3">
+        <div class="fgrp"><label>De (m)</label><input type="number" value="${l.de||0}" onchange="updateLitho(${i},'de',this.value)" placeholder="0"></div>
+        <div class="fgrp"><label>Até (m)</label><input type="number" value="${l.ate||0}" onchange="updateLitho(${i},'ate',this.value)" placeholder="20"></div>
+        <div class="fgrp"><label>Cor</label><input type="color" value="${l.cor||'#c8834a'}" onchange="updateLitho(${i},'cor',this.value)"></div>
+      </div>
+      <div class="frow frow-1">
+        <div class="fgrp">
+          <label>Descrição Litológica</label>
+          <textarea rows="2" onchange="updateLitho(${i},'descricao',this.value)" placeholder="Ex.: Areia grossa, quartzosa, branca, mal selecionada">${l.descricao||''}</textarea>
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function addLitho() {
+  const last = state.litologias[state.litologias.length - 1];
+  const newDe = last ? last.ate : 0;
+  const newAte = newDe + 20;
+  const cor = LITHO_COLORS[state.litologias.length % LITHO_COLORS.length];
+  state.litologias.push({ de: newDe, ate: newAte, descricao: '', cor });
+  saveState(); renderLithos(); updateDiagram();
+}
+
+function removeLitho(i) {
+  state.litologias.splice(i, 1);
+  saveState(); renderLithos(); updateDiagram();
+}
+
+function updateLitho(i, field, value) {
+  if (field === 'de' || field === 'ate') value = parseFloat(value) || 0;
+  state.litologias[i][field] = value;
+  saveState(); renderLithos(); updateDiagram();
+}
+
+// ============================================================
+// SVG WELL DIAGRAM
+// ============================================================
+function hexToRgb(hex) {
+  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '#888888');
+  return r ? [parseInt(r[1],16), parseInt(r[2],16), parseInt(r[3],16)] : [136,136,136];
+}
+
+function updateDiagram() {
+  const svg = document.getElementById('well-svg');
+  svg.innerHTML = buildSVG(state);
+  document.getElementById('diagram-well-id').textContent = state.poco.codigo || 'PT';
+}
+
+function buildSVG(s) {
+  const W = 560, H = 720;
+  const totalDepth = Math.max(1, Number(s.poco.profundidadeTotal) || 100);
+  const c = s.construtivo;
+
+  // Layout zones
+  const SCALE_X = 36;       // x of depth axis
+  const WELL_CX = 160;      // center of well cross-section
+  const LITHO_BG_X = 48;    // start of lithology background
+  const LITHO_BG_W = 230;   // width of lithology background
+  const DESC_X = 298;        // start of description text
+  const DESC_W = 248;        // width for descriptions
+  const TOP_Y = 70;
+  const BOT_Y = H - 25;
+  const DEPTH_H = BOT_Y - TOP_Y;
+
+  const scl = DEPTH_H / totalDepth;
+  const gy = d => TOP_Y + d * scl;
+
+  // Dimensions (SVG px)
+  const D1_HW = 30;  // phase 1 drill half-width
+  const CAS_OD = 22; // casing OD half-width
+  const CAS_ID = 18; // casing ID half-width
+  const D2_HW = 18;  // phase 2 drill half-width
+  const EDUC_HW = 3.5;
+
+  const p1de = Math.max(0, Number(c.perfuracao1.de)||0);
+  const p1ate = Math.min(totalDepth, Number(c.perfuracao1.ate)||40);
+  const cemde = Math.max(0, Number(c.cimentacao.de)||0);
+  const cemate = Math.min(totalDepth, Number(c.cimentacao.ate)||40);
+  const revde = Math.max(0, Number(c.revestimento.de)||0);
+  const revate = Math.min(totalDepth, Number(c.revestimento.ate)||40);
+  const p2de = Math.max(0, Number(c.perfuracao2.de)||40);
+  const p2ate = Math.min(totalDepth, Number(c.perfuracao2.ate)||100);
+  const pumpDepth = Math.min(totalDepth, Number(c.bomba.profundidade)||80);
+  const lajeH = Math.max(2, (Number(c.laje.espessura)||0.10) * scl * 5 + 6);
+
+  let parts = [];
+
+  // ---- Background ----
+  parts.push(`<rect width="${W}" height="${H}" fill="#fafaf8"/>`);
+  // Light grid
+  for (let x = 0; x < W; x += 20) parts.push(`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="#eaeef2" stroke-width="0.5"/>`);
+  for (let y = 0; y < H; y += 20) parts.push(`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#eaeef2" stroke-width="0.5"/>`);
+
+  // ---- Title area ----
+  parts.push(`<rect x="0" y="0" width="${W}" height="${TOP_Y-10}" fill="#1a3050"/>`);
+  parts.push(`<text x="${W/2}" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff" font-family="Segoe UI,Arial,sans-serif">Perfil Litológico e Construtivo do Poço Tubular</text>`);
+  parts.push(`<text x="${W/2}" y="38" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.7)" font-family="Segoe UI,Arial,sans-serif">${s.requerente.nome||'Requerente'} · ${s.requerente.municipio||'Município'}/${s.requerente.uf||'UF'}</text>`);
+  parts.push(`<text x="${W/2}" y="52" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.55)" font-family="Segoe UI,Arial,sans-serif">${s.poco.codigo||'PT'} · Prof. estimada: ${totalDepth}m</text>`);
+
+  // Column headers
+  parts.push(`<text x="${WELL_CX}" y="${TOP_Y-4}" text-anchor="middle" font-size="9" font-weight="bold" fill="#4a6080" font-family="Segoe UI,Arial,sans-serif" letter-spacing="1">PERFIL CONSTRUTIVO</text>`);
+  parts.push(`<text x="${DESC_X + DESC_W/2}" y="${TOP_Y-4}" text-anchor="middle" font-size="9" font-weight="bold" fill="#4a6080" font-family="Segoe UI,Arial,sans-serif" letter-spacing="1">LITOLOGIAS</text>`);
+
+  // ---- Lithology background strips ----
+  s.litologias.forEach(layer => {
+    if (layer.ate <= layer.de) return;
+    const y1 = gy(Math.max(0, layer.de));
+    const y2 = gy(Math.min(totalDepth, layer.ate));
+    const [r,g,b] = hexToRgb(layer.cor);
+    parts.push(`<rect x="${LITHO_BG_X}" y="${y1}" width="${LITHO_BG_W}" height="${y2-y1}" fill="rgb(${r},${g},${b})" opacity="0.35"/>`);
+    // Description area color strip
+    parts.push(`<rect x="${DESC_X}" y="${y1}" width="${DESC_W}" height="${y2-y1}" fill="rgb(${r},${g},${b})" opacity="0.12"/>`);
+  });
+
+  // Boundary line between columns
+  parts.push(`<line x1="${DESC_X-4}" y1="${TOP_Y}" x2="${DESC_X-4}" y2="${BOT_Y}" stroke="#ccd8e8" stroke-width="0.8"/>`);
+
+  // ---- Depth axis ----
+  parts.push(`<line x1="${SCALE_X}" y1="${TOP_Y}" x2="${SCALE_X}" y2="${BOT_Y}" stroke="#8090a8" stroke-width="1"/>`);
+  for (let d = 0; d <= totalDepth; d += (totalDepth <= 50 ? 5 : totalDepth <= 200 ? 10 : 20)) {
+    const y = gy(d);
+    parts.push(`<line x1="${SCALE_X-4}" y1="${y}" x2="${SCALE_X}" y2="${y}" stroke="#6a7a90" stroke-width="1"/>`);
+    parts.push(`<text x="${SCALE_X-6}" y="${y+3}" text-anchor="end" font-size="8" fill="#6a7a90" font-family="monospace">${d}</text>`);
+  }
+  // Depth label rotated
+  parts.push(`<text x="12" y="${(TOP_Y+BOT_Y)/2}" text-anchor="middle" font-size="9" fill="#8090a8" font-family="Segoe UI,Arial,sans-serif" transform="rotate(-90,12,${(TOP_Y+BOT_Y)/2})">Profundidade (m)</text>`);
+
+  // ---- PHASE 1 DRILL HOLE ----
+  parts.push(`<rect x="${WELL_CX-D1_HW}" y="${gy(p1de)}" width="${D1_HW*2}" height="${gy(p1ate)-gy(p1de)}" fill="#ede6d8"/>`);
+  // Dashed boundary lines for drill hole
+  parts.push(`<line x1="${WELL_CX-D1_HW}" y1="${gy(p1de)}" x2="${WELL_CX-D1_HW}" y2="${gy(p1ate)}" stroke="#bbb" stroke-width="1" stroke-dasharray="4,2"/>`);
+  parts.push(`<line x1="${WELL_CX+D1_HW}" y1="${gy(p1de)}" x2="${WELL_CX+D1_HW}" y2="${gy(p1ate)}" stroke="#bbb" stroke-width="1" stroke-dasharray="4,2"/>`);
+
+  // ---- CEMENT (diagonal hatch pattern) ----
+  const cemId = `cem${Math.random().toString(36).slice(2)}`;
+  parts.push(`<defs>
+    <pattern id="${cemId}" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#a8b8c8"/>
+      <line x1="0" y1="6" x2="6" y2="0" stroke="#8898a8" stroke-width="0.8"/>
+    </pattern>
+  </defs>`);
+  const cemH = Math.max(0, gy(cemate) - gy(cemde));
+  // Left annulus
+  parts.push(`<rect x="${WELL_CX-D1_HW}" y="${gy(cemde)}" width="${D1_HW-CAS_OD}" height="${cemH}" fill="url(#${cemId})"/>`);
+  // Right annulus
+  parts.push(`<rect x="${WELL_CX+CAS_OD}" y="${gy(cemde)}" width="${D1_HW-CAS_OD}" height="${cemH}" fill="url(#${cemId})"/>`);
+
+  // ---- CASING ----
+  const revH = Math.max(0, gy(revate) - gy(revde));
+  parts.push(`<rect x="${WELL_CX-CAS_OD}" y="${gy(revde)}" width="${CAS_OD-CAS_ID}" height="${revH}" fill="#80b0d8"/>`);
+  parts.push(`<rect x="${WELL_CX+CAS_ID}" y="${gy(revde)}" width="${CAS_OD-CAS_ID}" height="${revH}" fill="#80b0d8"/>`);
+  // Casing outlines
+  parts.push(`<line x1="${WELL_CX-CAS_OD}" y1="${gy(revde)}" x2="${WELL_CX-CAS_OD}" y2="${gy(revate)}" stroke="#3068b0" stroke-width="1.2"/>`);
+  parts.push(`<line x1="${WELL_CX+CAS_OD}" y1="${gy(revde)}" x2="${WELL_CX+CAS_OD}" y2="${gy(revate)}" stroke="#3068b0" stroke-width="1.2"/>`);
+  parts.push(`<line x1="${WELL_CX-CAS_ID}" y1="${gy(revde)}" x2="${WELL_CX-CAS_ID}" y2="${gy(revate)}" stroke="#3068b0" stroke-width="0.8"/>`);
+  parts.push(`<line x1="${WELL_CX+CAS_ID}" y1="${gy(revde)}" x2="${WELL_CX+CAS_ID}" y2="${gy(revate)}" stroke="#3068b0" stroke-width="0.8"/>`);
+
+  // ---- PHASE 2 DRILL HOLE ----
+  const p2H = Math.max(0, gy(p2ate) - gy(p2de));
+  parts.push(`<rect x="${WELL_CX-D2_HW}" y="${gy(p2de)}" width="${D2_HW*2}" height="${p2H}" fill="#dde4ee"/>`);
+  parts.push(`<line x1="${WELL_CX-D2_HW}" y1="${gy(p2de)}" x2="${WELL_CX-D2_HW}" y2="${gy(p2ate)}" stroke="#9090a8" stroke-width="0.8" stroke-dasharray="3,2"/>`);
+  parts.push(`<line x1="${WELL_CX+D2_HW}" y1="${gy(p2de)}" x2="${WELL_CX+D2_HW}" y2="${gy(p2ate)}" stroke="#9090a8" stroke-width="0.8" stroke-dasharray="3,2"/>`);
+
+  // ---- FILTERS ----
+  const filtId = `filt${Math.random().toString(36).slice(2)}`;
+  parts.push(`<defs>
+    <pattern id="${filtId}" x="0" y="0" width="5" height="3" patternUnits="userSpaceOnUse">
+      <rect width="5" height="3" fill="#f5a030"/>
+      <line x1="0" y1="1.5" x2="5" y2="1.5" stroke="#b06010" stroke-width="0.5" stroke-dasharray="2,1"/>
+    </pattern>
+  </defs>`);
+  (c.filtros || []).forEach(f => {
+    if (!f.de && !f.ate) return;
+    const fy1 = gy(Math.max(0,f.de));
+    const fy2 = gy(Math.min(totalDepth, f.ate));
+    if (fy2 <= fy1) return;
+    parts.push(`<rect x="${WELL_CX-CAS_ID+1}" y="${fy1}" width="${(CAS_ID-1)*2}" height="${fy2-fy1}" fill="url(#${filtId})"/>`);
+    parts.push(`<rect x="${WELL_CX-CAS_ID+1}" y="${fy1}" width="${(CAS_ID-1)*2}" height="${fy2-fy1}" fill="none" stroke="#c07020" stroke-width="0.8"/>`);
+  });
+
+  // ---- EDUCTION TUBE ----
+  const pumpY = gy(pumpDepth);
+  parts.push(`<rect x="${WELL_CX-EDUC_HW-1}" y="${gy(0)}" width="1.2" height="${pumpY-gy(0)}" fill="#4878b8"/>`);
+  parts.push(`<rect x="${WELL_CX+EDUC_HW}" y="${gy(0)}" width="1.2" height="${pumpY-gy(0)}" fill="#4878b8"/>`);
+  parts.push(`<rect x="${WELL_CX-EDUC_HW}" y="${gy(0)}" width="${EDUC_HW*2}" height="${pumpY-gy(0)}" fill="rgba(72,120,184,0.12)"/>`);
+
+  // ---- SUBMERSIBLE PUMP ----
+  parts.push(`<rect x="${WELL_CX-7}" y="${pumpY-1}" width="14" height="12" rx="2" fill="#2050a0"/>`);
+  parts.push(`<rect x="${WELL_CX-5}" y="${pumpY+1}" width="10" height="8" rx="1" fill="#3068c8"/>`);
+  parts.push(`<line x1="${WELL_CX-7}" y1="${pumpY+12}" x2="${WELL_CX+7}" y2="${pumpY+12}" stroke="#1830a0" stroke-width="1.5"/>`);
+
+  // ---- SANITARY SLAB ----
+  const lajeW = D1_HW * 2 + 20;
+  parts.push(`<rect x="${WELL_CX-lajeW/2}" y="${gy(0)-lajeH}" width="${lajeW}" height="${lajeH}" fill="#b8c4d0" rx="1"/>`);
+  parts.push(`<rect x="${WELL_CX-lajeW/2}" y="${gy(0)-lajeH}" width="${lajeW}" height="${lajeH}" fill="none" stroke="#8898a8" stroke-width="0.8"/>`);
+  // Hatch for concrete
+  for (let lx = WELL_CX - lajeW/2 + 4; lx < WELL_CX + lajeW/2; lx += 8)
+    parts.push(`<line x1="${lx}" y1="${gy(0)-lajeH}" x2="${lx-4}" y2="${gy(0)}" stroke="#a0aac0" stroke-width="0.5"/>`);
+
+  // ---- SURFACE EQUIPMENT ----
+  // Well cap
+  parts.push(`<rect x="${WELL_CX-CAS_OD-2}" y="${gy(0)-lajeH-9}" width="${(CAS_OD+2)*2}" height="8" rx="2" fill="#607080"/>`);
+  // Hydrometer & faucet (schematic)
+  parts.push(`<line x1="${WELL_CX+CAS_OD+2}" y1="${gy(0)-lajeH-5}" x2="${WELL_CX+CAS_OD+18}" y2="${gy(0)-lajeH-5}" stroke="#404040" stroke-width="2"/>`);
+  parts.push(`<rect x="${WELL_CX+CAS_OD+10}" y="${gy(0)-lajeH-10}" width="10" height="8" rx="1" fill="#808898" stroke="#404040" stroke-width="0.8"/>`);
+  parts.push(`<line x1="${WELL_CX+CAS_OD+26}" y1="${gy(0)-lajeH-5}" x2="${WELL_CX+CAS_OD+30}" y2="${gy(0)-lajeH-2}" stroke="#404040" stroke-width="2"/>`);
+
+  // ---- LEADER LINES & LEGEND ----
+  // Legend box
+  const LEG_X = 400, LEG_Y = TOP_Y + 2, LEG_W = 150, LEG_LINE = 13;
+  parts.push(`<rect x="${LEG_X}" y="${LEG_Y}" width="${LEG_W}" height="${10 + LEG_LINE * 11}" fill="white" stroke="#ccd8e8" stroke-width="1" rx="4"/>`);
+  parts.push(`<text x="${LEG_X + LEG_W/2}" y="${LEG_Y+10}" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#1a3050" font-family="Segoe UI,Arial,sans-serif" letter-spacing="0.5">LEGENDA</text>`);
+
+  const legendItems = [
+    { n:'1', label:'Torneira', col:'#606060' },
+    { n:'2', label:'Hidrômetro', col:'#808898' },
+    { n:'3', label:`Tampa Ø ${c.revestimento.diametro||'6"'}`, col:'#607080' },
+    { n:'4', label:'Tubo Guia', col:'#4070a0' },
+    { n:'5', label:`Laje ${c.laje.espessura||'0,10'}m×${c.laje.largura||1}m×${c.laje.comprimento||1}m`, col:'#b8c4d0' },
+    { n:'6', label:`Perf. Ø${c.perfuracao1.diametro||'8.1/2"'} ${c.perfuracao1.de||0}–${c.perfuracao1.ate||40}m`, col:'#bbb' },
+    { n:'7', label:`Cimentação ${c.cimentacao.de||0}–${c.cimentacao.ate||40}m`, col:'#a8b8c8' },
+    { n:'8', label:`Rev. Ø${c.revestimento.diametro||'6"'} ${c.revestimento.de||0}–${c.revestimento.ate||40}m`, col:'#80b0d8' },
+    { n:'9', label:`Perf. Ø${c.perfuracao2.diametro||'6.1/8"'} ${c.perfuracao2.de||40}–${c.perfuracao2.ate||100}m`, col:'#9090a8' },
+    { n:'10', label:`Tubulaç. Edut. Ø${c.bomba.diametroEdutora||'2"'}`, col:'#4878b8' },
+    { n:'11', label:`Bomba ${c.bomba.profundidade||80}m`, col:'#2050a0' },
+  ];
+  legendItems.forEach((item, idx) => {
+    const ly = LEG_Y + 16 + idx * LEG_LINE;
+    parts.push(`<circle cx="${LEG_X+9}" cy="${ly+1}" r="5" fill="${item.col}"/>`);
+    parts.push(`<text x="${LEG_X+17}" y="${ly+5}" font-size="7.5" fill="#1a2638" font-family="Segoe UI,Arial,sans-serif"><tspan font-weight="bold">${item.n}</tspan> ${item.label}</text>`);
+  });
+
+  // ---- LITHOLOGY DESCRIPTIONS ----
+  s.litologias.forEach((layer, i) => {
+    if (layer.ate <= layer.de || layer.de >= totalDepth) return;
+    const midD = (layer.de + Math.min(layer.ate, totalDepth)) / 2;
+    const midY = gy(midD);
+    const y1 = gy(Math.max(0, layer.de));
+    const y2 = gy(Math.min(totalDepth, layer.ate));
+    const [r,g,b] = hexToRgb(layer.cor);
+    // Color swatch
+    parts.push(`<rect x="${DESC_X}" y="${y1+1}" width="5" height="${Math.max(2, y2-y1-2)}" fill="rgb(${r},${g},${b})" rx="1"/>`);
+    // Depth label
+    parts.push(`<text x="${DESC_X+9}" y="${y1+9}" font-size="8" font-weight="bold" fill="#4a6080" font-family="monospace">de ${layer.de},00 até ${layer.ate},00</text>`);
+    // Description (wrap)
+    const maxChars = 34;
+    const desc = layer.descricao || '';
+    const words = desc.split(' ');
+    let lines = [], cur = '';
+    words.forEach(w => {
+      if ((cur + ' ' + w).trim().length > maxChars) { if (cur) lines.push(cur); cur = w; }
+      else cur = (cur ? cur + ' ' : '') + w;
+    });
+    if (cur) lines.push(cur);
+    lines.slice(0, 3).forEach((ln, li) => {
+      parts.push(`<text x="${DESC_X+9}" y="${y1+18+li*11}" font-size="8.5" fill="#1a2638" font-family="Segoe UI,Arial,sans-serif">${ln}</text>`);
+    });
+    // Separator line
+    if (i < s.litologias.length - 1 && layer.ate < totalDepth) {
+      parts.push(`<line x1="${DESC_X}" y1="${y2}" x2="${DESC_X+DESC_W-10}" y2="${y2}" stroke="rgb(${r},${g},${b})" stroke-width="0.8" stroke-dasharray="3,2"/>`);
+    }
+  });
+
+  // ---- DEPTH ANNOTATIONS (items 6-9) ----
+  const annColor = '#d4740a';
+  // Phase 1 annotation
+  const ann1Y = gy((p1de + Math.min(p1ate, totalDepth)) / 2);
+  parts.push(`<line x1="${WELL_CX-D1_HW-3}" y1="${ann1Y}" x2="${WELL_CX-D1_HW-14}" y2="${ann1Y}" stroke="${annColor}" stroke-width="0.7"/>`);
+  // Phase 2 annotation
+  const ann2Y = gy((p2de + Math.min(p2ate, totalDepth)) / 2);
+  parts.push(`<line x1="${WELL_CX-D2_HW-3}" y1="${ann2Y}" x2="${WELL_CX-D2_HW-14}" y2="${ann2Y}" stroke="${annColor}" stroke-width="0.7"/>`);
+
+  // Water levels (if defined)
+  const ne = Number(s.hidrogeologia.nivelEstatico);
+  const nd = Number(s.hidrogeologia.nivelDinamico);
+  if (ne > 0 && ne < totalDepth) {
+    const ney = gy(ne);
+    parts.push(`<line x1="${WELL_CX-CAS_ID}" y1="${ney}" x2="${WELL_CX+CAS_ID}" y2="${ney}" stroke="#2080c0" stroke-width="1.5" stroke-dasharray="5,2"/>`);
+    parts.push(`<text x="${WELL_CX+CAS_OD+5}" y="${ney+4}" font-size="7" fill="#2060a0" font-family="Segoe UI,Arial,sans-serif">NE=${ne}m</text>`);
+  }
+  if (nd > 0 && nd < totalDepth) {
+    const ndy = gy(nd);
+    parts.push(`<line x1="${WELL_CX-CAS_ID}" y1="${ndy}" x2="${WELL_CX+CAS_ID}" y2="${ndy}" stroke="#208040" stroke-width="1.5" stroke-dasharray="5,2"/>`);
+    parts.push(`<text x="${WELL_CX+CAS_OD+5}" y="${ndy+4}" font-size="7" fill="#206030" font-family="Segoe UI,Arial,sans-serif">ND=${nd}m</text>`);
+  }
+
+  // Bottom cap of well
+  parts.push(`<line x1="${WELL_CX-D2_HW}" y1="${gy(totalDepth)}" x2="${WELL_CX+D2_HW}" y2="${gy(totalDepth)}" stroke="#606070" stroke-width="2"/>`);
+
+  // Ground surface line
+  parts.push(`<line x1="${LITHO_BG_X}" y1="${gy(0)}" x2="${WELL_CX+D1_HW+5}" y2="${gy(0)}" stroke="#404040" stroke-width="1.5"/>`);
+
+  return parts.join('\n');
+}
+
+// ============================================================
+// PDF GENERATION
+// ============================================================
+function hexToRgbObj(hex) {
+  const [r,g,b] = hexToRgb(hex);
+  return {r,g,b};
+}
+
+function outorgaAuthority(uf) {
+  const auth = {
+    'AC':'IMAC','AL':'IMA','AP':'SEMA-AP','AM':'IPAAM','BA':'INEMA',
+    'CE':'COGERH','DF':'ADASA','ES':'IEMA','GO':'SECIMA','MA':'SEMA-MA',
+    'MT':'SEMA-MT','MS':'IMASUL','MG':'IGAM','PA':'SEMAS','PB':'AESA',
+    'PR':'IAT','PE':'APAC','PI':'SEMAR','RJ':'INEA','RN':'IGARN',
+    'RS':'FEPAM','RO':'SEDAM','RR':'FEMACT','SC':'SGA','SP':'DAEE',
+    'SE':'SEMARH-SE','TO':'NATURATINS'
+  };
+  return auth[uf] || 'Órgão Estadual';
+}
+
+function updateOutorgaAuthority() {
+  const uf = state.requerente.uf;
+  const el = document.getElementById('outorga-authority');
+  if (el && uf) {
+    el.textContent = `Órgão competente: ${outorgaAuthority(uf)} (${uf})`;
+    setPath(state, 'outorga.orgaoAmbiental', `${outorgaAuthority(uf)}-${uf}`);
+  }
+}
+
+async function generatePDF() {
+  const btn = document.getElementById('pdf-btn');
+  const icon = document.getElementById('pdf-icon');
+  btn.disabled = true;
+  icon.innerHTML = '<span class="spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;"></span>';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    const PW = 210, PH = 297;
+    const ML = 14, MR = 14, MT = 14, MB = 14;
+    const CW = PW - ML - MR;
+
+    const fmtDate = (d) => d ? new Date(d).toLocaleDateString('pt-BR') : '___/___/______';
+    const v = (path, fallback='') => {
+      const val = getPath(state, path);
+      return (val !== undefined && val !== '' && val !== null) ? String(val) : fallback;
+    };
+
+    // ===========================
+    // PAGE 1 – IDENTIFICAÇÃO
+    // ===========================
+    // Header bar
+    doc.setFillColor(26, 48, 80);
+    doc.rect(0, 0, PW, 28, 'F');
+
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('RELATÓRIO DE EXECUÇÃO DE POÇO TUBULAR PROFUNDO', PW/2, 11, {align:'center'});
+    doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+    doc.text('ABNT NBR 12212 · 12244 · 13604  |  SIAGAS / CNARH  |  Outorga Estadual', PW/2, 19, {align:'center'});
+
+    const wellRef = v('poco.codigo','PT01') + ' · ' + v('requerente.municipio','Município') + '/' + v('requerente.uf','UF');
+    doc.setFontSize(8); doc.text(wellRef, PW/2, 25, {align:'center'});
+
+    // Dividers & sections
+    let y = 35;
+    const drawSectionTitle = (title, yp) => {
+      doc.setFillColor(37,68,112); doc.rect(ML, yp, CW, 6, 'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+      doc.text(title.toUpperCase(), ML+3, yp+4.3);
+      return yp + 8;
+    };
+
+    const drawTable = (headers, rows, yp, colWidths) => {
+      const rowH = 6.5;
+      // header
+      doc.setFillColor(220, 230, 242); doc.rect(ML, yp, CW, rowH, 'F');
+      doc.setDrawColor(180,195,215); doc.setLineWidth(0.3);
+      let xp = ML;
+      doc.setTextColor(26,48,80); doc.setFontSize(7.5); doc.setFont('helvetica','bold');
+      headers.forEach((h, i) => {
+        doc.text(h, xp+2, yp+4.5);
+        xp += colWidths[i];
+      });
+      doc.rect(ML, yp, CW, rowH);
+      yp += rowH;
+      // rows
+      rows.forEach((row, ri) => {
+        if (ri % 2 === 1) { doc.setFillColor(247,250,254); doc.rect(ML, yp, CW, rowH, 'F'); }
+        xp = ML;
+        doc.setTextColor(30,38,56); doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+        row.forEach((cell, ci) => {
+          const lines = doc.splitTextToSize(String(cell), colWidths[ci]-3);
+          doc.text(lines[0] || '', xp+2, yp+4.5);
+          xp += colWidths[ci];
+        });
+        doc.setDrawColor(200,210,225); doc.rect(ML, yp, CW, rowH);
+        yp += rowH;
+      });
+      return yp + 2;
+    };
+
+    // Requester section
+    y = drawSectionTitle('1. Dados do Requerente e Identificação do Poço', y);
+    y = drawTable(
+      ['Campo','Dado','Campo','Dado'],
+      [
+        ['Requerente', v('requerente.nome'), 'CNPJ/CPF', v('requerente.cnpj')],
+        ['Responsável', v('requerente.responsavel'), 'Telefone', v('requerente.telefone')],
+        ['Endereço', v('requerente.endereco'), 'E-mail', v('requerente.email')],
+        ['Município/UF', v('requerente.municipio')+'/'+v('requerente.uf'), 'Finalidade', v('poco.finalidade').replace(/_/g,' ')],
+        ['Proprietário', v('poco.proprietario'), 'Localidade', v('poco.localidade')],
+      ],
+      y, [38, 57, 38, 49]
+    );
+
+    y = drawSectionTitle('2. Dados Técnicos do Poço', y);
+    y = drawTable(
+      ['Campo','Dado','Campo','Dado'],
+      [
+        ['Código do Poço', v('poco.codigo'), 'Prof. Total (m)', v('poco.profundidadeTotal')],
+        ['Datum', v('poco.datum'), 'Fuso UTM', v('poco.fusoUtm')],
+        ['Latitude (DD)', v('poco.latitude'), 'Longitude (DD)', v('poco.longitude')],
+        ['E (UTM)', v('poco.coordE'), 'N (UTM)', v('poco.coordN')],
+        ['Altitude (m)', v('poco.altitude'), 'Bacia', v('poco.bacia')],
+        ['Método Perfuração', v('poco.metodoPerfuracao').replace(/_/g,' '), 'Diâm. Final', v('poco.diametroFinal')],
+        ['Data Início', fmtDate(v('poco.dataInicio')), 'Data Término', fmtDate(v('poco.dataTermino'))],
+      ],
+      y, [38, 57, 38, 49]
+    );
+
+    y = drawSectionTitle('3. Empresa Executora e Responsabilidade Técnica', y);
+    y = drawTable(
+      ['Campo','Dado','Campo','Dado'],
+      [
+        ['Empresa Perfuradora', v('siagas.empresaPerfuradora'), 'CNPJ', v('siagas.cnpjEmpresa')],
+        ['Responsável Técnico', v('siagas.responsavelTecnico'), 'CREA/CRG', v('siagas.crea')],
+        ['ART/RRT Nº', v('siagas.artNumero'), 'Situação do Poço', v('siagas.situacao')],
+      ],
+      y, [38, 57, 38, 49]
+    );
+
+    // Footer page 1
+    const drawFooter = (pageNum) => {
+      doc.setFillColor(240,244,250); doc.rect(0, PH-12, PW, 12, 'F');
+      doc.setDrawColor(180,195,215); doc.line(0, PH-12, PW, PH-12);
+      doc.setTextColor(100,120,150); doc.setFontSize(6.5); doc.setFont('helvetica','normal');
+      doc.text('ABNT NBR 12212 · 12244 · 13604  |  Gerado automaticamente – verificar junto ao RT', ML, PH-5);
+      doc.text(`Pág. ${pageNum}`, PW-ML, PH-5, {align:'right'});
+    };
+    drawFooter(1);
+
+    // ===========================
+    // PAGE 2 – PERFIL LITOLÓGICO E CONSTRUTIVO
+    // ===========================
+    doc.addPage();
+    doc.setFillColor(26,48,80); doc.rect(0,0,PW,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('Perfil Litológico e Construtivo do Poço Tubular', PW/2, 8, {align:'center'});
+    doc.setFontSize(8); doc.setFont('helvetica','normal');
+    doc.text(`${v('poco.codigo','PT')} · ${v('requerente.nome')} · ${v('requerente.municipio')}/${v('requerente.uf')}`, PW/2, 14, {align:'center'});
+
+    // Draw the well diagram using jsPDF primitives
+    drawWellDiagramPDF(doc, state, ML, 22, CW, PH - 22 - 16);
+    drawFooter(2);
+
+    // ===========================
+    // PAGE 3 – DADOS CONSTRUTIVOS
+    // ===========================
+    doc.addPage();
+    doc.setFillColor(26,48,80); doc.rect(0,0,PW,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('Especificações Construtivas (ABNT NBR 12212 / 12244 / 13604)', PW/2, 11, {align:'center'});
+
+    y = 24;
+    y = drawSectionTitle('4. Perfil Construtivo – Especificações', y);
+    y = drawTable(
+      ['Item','Componente','Especificação','Norma Ref.'],
+      [
+        ['5','Laje proteção sanitária', `Esp.:${v('construtivo.laje.espessura')}m / ${v('construtivo.laje.largura')}m×${v('construtivo.laje.comprimento')}m / ${v('construtivo.laje.material')}`, 'NBR 12244'],
+        ['6','Perfuração Fase 1', `Ø${v('construtivo.perfuracao1.diametro')} de ${v('construtivo.perfuracao1.de')}m a ${v('construtivo.perfuracao1.ate')}m`, 'NBR 12212'],
+        ['7','Cimentação', `${v('construtivo.cimentacao.tipo')} / de ${v('construtivo.cimentacao.de')}m a ${v('construtivo.cimentacao.ate')}m / Traço: ${v('construtivo.cimentacao.traco')}`, 'NBR 12244'],
+        ['8','Revestimento Fase 1', `Ø${v('construtivo.revestimento.diametro')} / de ${v('construtivo.revestimento.de')}m a ${v('construtivo.revestimento.ate')}m / ${v('construtivo.revestimento.material')} / e=${v('construtivo.revestimento.espessuraParede')}mm`, 'NBR 13604'],
+        ['9','Perfuração Fase 2', `Ø${v('construtivo.perfuracao2.diametro')} de ${v('construtivo.perfuracao2.de')}m a ${v('construtivo.perfuracao2.ate')}m`, 'NBR 12212'],
+        ['10','Tubulação Edutora', `Ø${v('construtivo.bomba.diametroEdutora')} / ${v('construtivo.bomba.materialEdutora')}`, 'NBR 12244'],
+        ['11','Bomba Submersa', `Prof.:${v('construtivo.bomba.profundidade')}m / ${v('construtivo.bomba.modelo')} / ${v('construtivo.bomba.potencia')} / ${v('construtivo.bomba.vazaoBomba')}m³/h`, 'NBR 12244'],
+      ],
+      y, [12, 42, 88, 40]
+    );
+
+    if (state.construtivo.filtros.length > 0) {
+      y = drawSectionTitle('5. Filtros / Pré-filtros (ABNT NBR 13604)', y);
+      const filtRows = state.construtivo.filtros.map((f, i) => [
+        `F${i+1}`, `${f.de}m a ${f.ate}m`, f.tipo, `Ø${f.diametro||'-'} / abert.${f.abertura||'-'}mm`
+      ]);
+      y = drawTable(['Filtro','Intervalo','Tipo','Especificação'], filtRows, y, [18,40,50,74]);
+    }
+
+    y = drawSectionTitle('6. Perfil Litológico Resumido', y);
+    const lithoRows = state.litologias.map((l, i) => [
+      `C${i+1}`, `${l.de}m`, `${l.ate}m`, `${l.ate-l.de}m`, l.descricao || '-'
+    ]);
+    y = drawTable(['Camada','De','Até','Esp.','Descrição Litológica'], lithoRows, y, [18,18,18,18,110]);
+
+    drawFooter(3);
+
+    // ===========================
+    // PAGE 4 – HIDROGEOLOGIA & SIAGAS
+    // ===========================
+    doc.addPage();
+    doc.setFillColor(26,48,80); doc.rect(0,0,PW,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('Dados Hidrogeológicos, Outorga e Ficha SIAGAS/CNARH', PW/2, 11, {align:'center'});
+
+    y = 24;
+    y = drawSectionTitle('7. Dados Hidrogeológicos e de Bombeamento', y);
+    y = drawTable(
+      ['Parâmetro','Valor','Parâmetro','Valor'],
+      [
+        ['Nível Estático (m)', v('hidrogeologia.nivelEstatico','—'), 'Nível Dinâmico (m)', v('hidrogeologia.nivelDinamico','—')],
+        ['Vazão de Teste (m³/h)', v('hidrogeologia.vazaoTeste','—'), 'Rebaixamento (m)', v('hidrogeologia.rebaixamento','—')],
+        ['Vazão Específica (m³/h/m)', v('hidrogeologia.vazaoEspecifica','—'), 'Duração Teste (h)', v('hidrogeologia.duracaoTeste','—')],
+        ['Transmissividade (m²/s)', v('hidrogeologia.transmissividade','—'), 'Cond. Hidráulica (m/s)', v('hidrogeologia.condutividade','—')],
+        ['Sistema Aquífero', v('hidrogeologia.sistemaAquifero','—'), 'Tipo Aquífero', v('hidrogeologia.tipoAquifero','—')],
+        ['pH', v('hidrogeologia.ph','—'), 'Temperatura (°C)', v('hidrogeologia.temperatura','—')],
+        ['Condut. Elétrica (µS/cm)', v('hidrogeologia.condutividadeEletrica','—'), 'STD (mg/L)', v('hidrogeologia.std','—')],
+      ],
+      y, [50, 45, 50, 37]
+    );
+
+    y = drawSectionTitle('8. Outorga e Uso dos Recursos Hídricos', y);
+    const uf = v('requerente.uf','—');
+    y = drawTable(
+      ['Parâmetro','Valor','Parâmetro','Valor'],
+      [
+        ['Órgão Gestor', outorgaAuthority(uf)+'/'+uf, 'Tipo Outorga', v('outorga.tipo','—').replace(/_/g,' ')],
+        ['Nº Processo', v('outorga.numeroProcesso','—'), 'Data Validade', fmtDate(v('outorga.dataValidade'))],
+        ['Nº CNARH', v('outorga.numeroCnarh','—'), 'Uso da Água', v('hidrogeologia.usoAgua','—').replace(/_/g,' ')],
+        ['Vazão Outorgada (m³/h)', v('outorga.vazaoOutorgada','—'), 'Volume Diário (m³/dia)', v('outorga.volumeDiario','—')],
+        ['Volume Anual (m³/ano)', v('outorga.volumeAnual','—'), 'Horas Bombeamento/dia', v('outorga.horasBombeamento','—')],
+      ],
+      y, [50, 45, 50, 37]
+    );
+
+    if (v('outorga.obs')) {
+      doc.setFontSize(7.5); doc.setTextColor(40,50,70); doc.setFont('helvetica','italic');
+      const obsLines = doc.splitTextToSize('Obs.: ' + v('outorga.obs'), CW);
+      doc.text(obsLines, ML, y);
+      y += obsLines.length * 4 + 4;
+    }
+
+    y = drawSectionTitle('9. Ficha SIAGAS (CPRM) – Campos de Cadastro', y);
+    y = drawTable(
+      ['Campo SIAGAS','Valor','Campo SIAGAS','Valor'],
+      [
+        ['Código SIAGAS', v('siagas.codigoPoco','—'), 'Situação', v('siagas.situacao','—')],
+        ['Inv. Estadual', v('siagas.inventarioEstadual','—'), 'Tipo Proprietário', v('siagas.tipoPropietario','—')],
+        ['Empresa Perfuradora', v('siagas.empresaPerfuradora','—'), 'Responsável Técnico', v('siagas.responsavelTecnico','—')],
+        ['CREA/CRG', v('siagas.crea','—'), 'ART/RRT Nº', v('siagas.artNumero','—')],
+        ['Data Término', fmtDate(v('poco.dataTermino')), 'Método Perf.', v('poco.metodoPerfuracao','—').replace(/_/g,' ')],
+        ['Prof. Total (m)', v('poco.profundidadeTotal','—'), 'Datum', v('poco.datum','—')],
+        ['Latitude', v('poco.latitude','—'), 'Longitude', v('poco.longitude','—')],
+        ['Aquífero', v('hidrogeologia.sistemaAquifero','—'), 'NE (m)', v('hidrogeologia.nivelEstatico','—')],
+      ],
+      y, [50, 45, 50, 37]
+    );
+
+    // Signature block
+    y = Math.max(y, PH - 55);
+    doc.setFillColor(247,250,254); doc.rect(ML, y, CW, 40, 'F');
+    doc.setDrawColor(180,195,215); doc.rect(ML, y, CW, 40);
+
+    const sigW = CW / 3 - 4;
+    [0,1,2].forEach(i => {
+      const sx = ML + i * (CW/3);
+      doc.setDrawColor(150,170,200); doc.line(sx + 5, y + 28, sx + sigW - 5, y + 28);
+      doc.setTextColor(80,100,130); doc.setFontSize(7); doc.setFont('helvetica','normal');
+      const labels = ['Responsável Técnico\nNome / CREA / Data', 'Responsável pelo Empreendimento\nNome / CPF / Data', 'Fiscal do Órgão Gestor\nNome / Matrícula / Data'];
+      labels[i].split('\n').forEach((ln, li) => {
+        doc.text(ln, sx + sigW/2 + 2, y + 30 + li * 4.5, {align:'center'});
+      });
+    });
+    doc.setTextColor(100,120,150); doc.setFontSize(7.5); doc.setFont('helvetica','bold');
+    doc.text('Assinaturas e Responsabilidades Técnicas', PW/2, y + 7, {align:'center'});
+
+    drawFooter(4);
+
+    // Save PDF
+    const fileName = `Poco_Tubular_${(v('poco.codigo','PT')).replace(/[^a-zA-Z0-9]/g,'_')}_${v('requerente.municipio','Local')}.pdf`;
+    doc.save(fileName);
+    showToast('✅ PDF gerado com sucesso!');
+  } catch(err) {
+    console.error(err);
+    showToast('❌ Erro ao gerar PDF. Verifique o console.');
+  } finally {
+    btn.disabled = false;
+    icon.textContent = '📄';
+  }
+}
+
+// ============================================================
+// DRAW WELL DIAGRAM IN PDF (jsPDF primitives)
+// ============================================================
+function drawWellDiagramPDF(doc, s, ox, oy, w, h) {
+  const c = s.construtivo;
+  const totalDepth = Math.max(1, Number(s.poco.profundidadeTotal) || 100);
+  const scl = h / totalDepth;
+  const gy = d => oy + Math.min(totalDepth, Math.max(0, d)) * scl;
+
+  const WELL_CX = ox + 38;
+  const D1_HW = 5.5;
+  const CAS_OD = 4.0;
+  const CAS_ID = 3.3;
+  const D2_HW = 3.3;
+  const EDUC_HW = 0.7;
+
+  const p1de = Number(c.perfuracao1.de)||0;
+  const p1ate = Math.min(totalDepth, Number(c.perfuracao1.ate)||40);
+  const cemde = Number(c.cimentacao.de)||0;
+  const cemate = Math.min(totalDepth, Number(c.cimentacao.ate)||40);
+  const revde = Number(c.revestimento.de)||0;
+  const revate = Math.min(totalDepth, Number(c.revestimento.ate)||40);
+  const p2de = Number(c.perfuracao2.de)||40;
+  const p2ate = Math.min(totalDepth, Number(c.perfuracao2.ate)||100);
+  const pumpD = Math.min(totalDepth, Number(c.bomba.profundidade)||80);
+
+  // Background for whole diagram
+  doc.setFillColor(250, 250, 248);
+  doc.rect(ox, oy, w, h, 'F');
+  doc.setDrawColor(200, 210, 225); doc.setLineWidth(0.2);
+  doc.rect(ox, oy, w, h);
+
+  // Lithology bands
+  s.litologias.forEach(layer => {
+    if (layer.ate <= layer.de) return;
+    const {r,g,b} = hexToRgbObj(layer.cor || '#cccccc');
+    doc.setFillColor(Math.min(255, r+60), Math.min(255, g+60), Math.min(255, b+60));
+    doc.rect(ox, gy(layer.de), w, gy(layer.ate) - gy(layer.de), 'F');
+  });
+
+  // Depth axis
+  doc.setDrawColor(100,120,150); doc.setLineWidth(0.25);
+  doc.line(ox + 8, oy, ox + 8, oy + h);
+  doc.setFontSize(6); doc.setFont('helvetica','normal'); doc.setTextColor(80,100,130);
+  const tickStep = totalDepth <= 60 ? 10 : totalDepth <= 200 ? 10 : 20;
+  for (let d = 0; d <= totalDepth; d += tickStep) {
+    const y = gy(d);
+    doc.line(ox + 6, y, ox + 9, y);
+    doc.text(String(d), ox + 5, y + 1, {align:'right'});
+  }
+
+  // PHASE 1 DRILL HOLE
+  doc.setFillColor(235, 228, 215);
+  doc.rect(WELL_CX - D1_HW, gy(p1de), D1_HW*2, gy(p1ate)-gy(p1de), 'F');
+  doc.setDrawColor(170,170,170); doc.setLineWidth(0.2);
+  doc.setLineDashPattern([1.5,0.8], 0);
+  doc.line(WELL_CX-D1_HW, gy(p1de), WELL_CX-D1_HW, gy(p1ate));
+  doc.line(WELL_CX+D1_HW, gy(p1de), WELL_CX+D1_HW, gy(p1ate));
+  doc.setLineDashPattern([], 0);
+
+  // CEMENT
+  const cemYS = gy(cemde), cemH = gy(cemate) - cemYS;
+  doc.setFillColor(160, 176, 195);
+  doc.rect(WELL_CX-D1_HW, cemYS, D1_HW-CAS_OD, cemH, 'F');
+  doc.rect(WELL_CX+CAS_OD, cemYS, D1_HW-CAS_OD, cemH, 'F');
+  // Cement hatching
+  doc.setDrawColor(130,148,168); doc.setLineWidth(0.15);
+  const annW = D1_HW - CAS_OD;
+  for (let offset = 0; offset < annW + cemH; offset += 1.8) {
+    const x0L = WELL_CX-D1_HW, x1L = WELL_CX-CAS_OD;
+    const clamp = (val, lo, hi) => Math.max(lo, Math.min(hi, val));
+    const dy1 = clamp(offset - annW, 0, cemH);
+    const dy2 = clamp(offset, 0, cemH);
+    const dx1 = clamp(annW - offset + dy1, 0, annW);
+    const dx2 = clamp(annW - offset + dy2, 0, annW);
+    if (Math.abs(dy2-dy1) + Math.abs(dx2-dx1) > 0.3) {
+      doc.line(x0L + dx1, cemYS + dy1, x0L + dx2, cemYS + dy2);
+      doc.line(WELL_CX+CAS_OD + annW - dx1, cemYS + dy1, WELL_CX+CAS_OD + annW - dx2, cemYS + dy2);
+    }
+  }
+
+  // CASING
+  const revYS = gy(revde), revHH = gy(revate)-revYS;
+  doc.setFillColor(120, 170, 220);
+  doc.rect(WELL_CX-CAS_OD, revYS, CAS_OD-CAS_ID, revHH, 'F');
+  doc.rect(WELL_CX+CAS_ID, revYS, CAS_OD-CAS_ID, revHH, 'F');
+  doc.setDrawColor(40, 90, 170); doc.setLineWidth(0.4);
+  doc.line(WELL_CX-CAS_OD, revYS, WELL_CX-CAS_OD, gy(revate));
+  doc.line(WELL_CX+CAS_OD, revYS, WELL_CX+CAS_OD, gy(revate));
+  doc.setLineWidth(0.2);
+  doc.line(WELL_CX-CAS_ID, revYS, WELL_CX-CAS_ID, gy(revate));
+  doc.line(WELL_CX+CAS_ID, revYS, WELL_CX+CAS_ID, gy(revate));
+
+  // PHASE 2
+  doc.setFillColor(218, 224, 235);
+  doc.rect(WELL_CX-D2_HW, gy(p2de), D2_HW*2, gy(p2ate)-gy(p2de), 'F');
+  doc.setDrawColor(140,140,160); doc.setLineWidth(0.2);
+  doc.setLineDashPattern([1,0.6], 0);
+  doc.line(WELL_CX-D2_HW, gy(p2de), WELL_CX-D2_HW, gy(p2ate));
+  doc.line(WELL_CX+D2_HW, gy(p2de), WELL_CX+D2_HW, gy(p2ate));
+  doc.setLineDashPattern([], 0);
+
+  // FILTERS
+  (c.filtros||[]).forEach(f => {
+    if (!f.de || !f.ate) return;
+    const fy1 = gy(f.de), fh = gy(f.ate)-fy1;
+    if (fh <= 0) return;
+    doc.setFillColor(245, 160, 40);
+    doc.rect(WELL_CX-CAS_ID+0.3, fy1, (CAS_ID-0.3)*2, fh, 'F');
+    doc.setDrawColor(180, 100, 10); doc.setLineWidth(0.15);
+    for (let ly = fy1+0.6; ly < fy1+fh; ly += 0.9)
+      doc.line(WELL_CX-CAS_ID+0.3, ly, WELL_CX+CAS_ID-0.3, ly);
+  });
+
+  // EDUCTION TUBE
+  doc.setFillColor(60, 110, 190);
+  doc.rect(WELL_CX-EDUC_HW-0.3, gy(0), 0.3, gy(pumpD)-gy(0), 'F');
+  doc.rect(WELL_CX+EDUC_HW, gy(0), 0.3, gy(pumpD)-gy(0), 'F');
+
+  // PUMP
+  doc.setFillColor(20, 60, 160);
+  doc.roundedRect(WELL_CX-1.8, gy(pumpD), 3.6, 3, 0.5, 0.5, 'F');
+  doc.setFillColor(40, 90, 200);
+  doc.rect(WELL_CX-1.3, gy(pumpD)-1.2, 2.6, 1.2, 'F');
+
+  // SANITARY SLAB
+  const lajeH = (Number(c.laje.espessura)||0.1) * scl + 1.5;
+  doc.setFillColor(185, 195, 210);
+  doc.rect(WELL_CX-8, gy(0)-lajeH, 16, lajeH, 'F');
+  doc.setDrawColor(130,145,165); doc.setLineWidth(0.25);
+  doc.rect(WELL_CX-8, gy(0)-lajeH, 16, lajeH);
+
+  // WELL CAP
+  doc.setFillColor(80, 95, 115);
+  doc.rect(WELL_CX-CAS_OD-0.5, gy(0)-lajeH-3, (CAS_OD+0.5)*2, 2.5, 'F');
+
+  // Surface line
+  doc.setDrawColor(50,55,65); doc.setLineWidth(0.6);
+  doc.line(ox+10, gy(0), WELL_CX+D1_HW+3, gy(0));
+
+  // Bottom cap
+  doc.setDrawColor(70,75,90); doc.setLineWidth(1.0);
+  doc.line(WELL_CX-D2_HW, gy(totalDepth), WELL_CX+D2_HW, gy(totalDepth));
+
+  // WATER LEVELS
+  const ne = Number(s.hidrogeologia.nivelEstatico);
+  const nd = Number(s.hidrogeologia.nivelDinamico);
+  if (ne > 0 && ne < totalDepth) {
+    doc.setDrawColor(20,100,200); doc.setLineWidth(0.5);
+    doc.setLineDashPattern([2,1], 0);
+    doc.line(WELL_CX-CAS_ID, gy(ne), WELL_CX+CAS_ID, gy(ne));
+    doc.setLineDashPattern([], 0);
+    doc.setTextColor(20,80,180); doc.setFontSize(6);
+    doc.text(`NE=${ne}m`, WELL_CX+CAS_OD+1, gy(ne)+1.5);
+  }
+  if (nd > 0 && nd < totalDepth) {
+    doc.setDrawColor(20,140,60); doc.setLineWidth(0.5);
+    doc.setLineDashPattern([2,1], 0);
+    doc.line(WELL_CX-CAS_ID, gy(nd), WELL_CX+CAS_ID, gy(nd));
+    doc.setLineDashPattern([], 0);
+    doc.setTextColor(20,110,40); doc.setFontSize(6);
+    doc.text(`ND=${nd}m`, WELL_CX+CAS_OD+1, gy(nd)+1.5);
+  }
+
+  // LITHOLOGY DESCRIPTIONS
+  const descX = WELL_CX + D1_HW + 8;
+  const descMaxW = ox + w - descX - 2;
+  doc.setFont('helvetica','normal');
+  s.litologias.forEach(layer => {
+    if (layer.ate <= layer.de || layer.de >= totalDepth) return;
+    const y1 = gy(layer.de);
+    const y2 = gy(Math.min(totalDepth, layer.ate));
+    const midY = (y1+y2)/2;
+    const {r,g,b} = hexToRgbObj(layer.cor||'#888');
+    // Color swatch
+    doc.setFillColor(r,g,b); doc.rect(descX, y1+0.5, 2, Math.max(1.5, y2-y1-1), 'F');
+    // Depth range
+    doc.setTextColor(60,80,110); doc.setFontSize(6.5); doc.setFont('helvetica','bold');
+    doc.text(`de ${layer.de},00 até ${layer.ate},00`, descX+3, y1+4);
+    // Description
+    doc.setTextColor(25,35,50); doc.setFontSize(7); doc.setFont('helvetica','normal');
+    const lines = doc.splitTextToSize(layer.descricao||'', Math.max(10, descMaxW));
+    lines.slice(0,3).forEach((ln, li) => doc.text(ln, descX+3, y1+8.5+li*4));
+    // Divider
+    if (layer.ate < totalDepth) {
+      doc.setDrawColor(r,g,b); doc.setLineWidth(0.3);
+      doc.line(descX, y2, ox+w-2, y2);
+    }
+  });
+
+  // LEGEND BOX
+  const legX = ox + w - 55, legY = oy + 2, legW = 53;
+  doc.setFillColor(255,255,255); doc.rect(legX, legY, legW, 75, 'F');
+  doc.setDrawColor(180,195,215); doc.setLineWidth(0.3); doc.rect(legX, legY, legW, 75);
+  doc.setFillColor(26,48,80); doc.rect(legX, legY, legW, 5, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(7); doc.setFont('helvetica','bold');
+  doc.text('LEGENDA', legX + legW/2, legY+3.5, {align:'center'});
+
+  const legItems = [
+    {label:'Torneira', col:[80,80,80]},
+    {label:'Hidrômetro', col:[120,130,150]},
+    {label:`Tampa Ø${c.revestimento.diametro||'6"'}`, col:[80,95,115]},
+    {label:'Tubo Guia', col:[60,100,160]},
+    {label:`Laje ${c.laje.espessura||'0.10'}m`, col:[185,195,210]},
+    {label:`Perf.Ø${c.perfuracao1.diametro||'8.1/2"'} ${c.perfuracao1.de||0}-${c.perfuracao1.ate||40}m`, col:[200,195,185]},
+    {label:`Cimentação ${c.cimentacao.de||0}-${c.cimentacao.ate||40}m`, col:[160,176,195]},
+    {label:`Rev.Ø${c.revestimento.diametro||'6"'} ${c.revestimento.de||0}-${c.revestimento.ate||40}m`, col:[120,170,220]},
+    {label:`Perf.Ø${c.perfuracao2.diametro||'6.1/8"'} ${c.perfuracao2.de||40}-${c.perfuracao2.ate||100}m`, col:[200,210,225]},
+    {label:`Tubul. Edutora`, col:[60,110,190]},
+    {label:`Bomba ${c.bomba.profundidade||80}m`, col:[20,60,160]},
+  ];
+
+  legItems.forEach((item, idx) => {
+    const ly = legY + 7 + idx * 6.2;
+    doc.setFillColor(...item.col);
+    doc.circle(legX+3.5, ly+1.5, 2, 'F');
+    doc.setTextColor(25,35,60); doc.setFontSize(6); doc.setFont('helvetica','normal');
+    doc.text(`${idx+1} ${item.label}`, legX+7, ly+2.5);
+  });
+}
+
+// ============================================================
+// EXPORT / IMPORT JSON
+// ============================================================
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `poco_${(state.poco.codigo||'PT').replace(/[^a-zA-Z0-9]/g,'_')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📥 Dados exportados em JSON');
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      state = deepMerge(defaultState, imported);
+      saveState();
+      bindInputs();
+      renderFiltros();
+      renderLithos();
+      updateDiagram();
+      updateOutorgaAuthority();
+      showToast('📤 Dados importados com sucesso!');
+    } catch(err) {
+      showToast('❌ Arquivo JSON inválido');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function saveToast() {
+  saveState();
+  showToast('💾 Dados salvos localmente!');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  bindInputs();
+  renderFiltros();
+  renderLithos();
+  updateDiagram();
+  updateOutorgaAuthority();
+
+  // Auto-save on any input change (debounced)
+  let saveTimeout;
+  document.addEventListener('input', () => {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveState, 800);
+  });
+
+  // Listen for UF change to update authority
+  document.getElementById('uf-select').addEventListener('change', updateOutorgaAuthority);
+}
+
+init();
+</script>
+</body>
+</html>
