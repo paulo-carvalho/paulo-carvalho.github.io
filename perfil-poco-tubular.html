@@ -241,10 +241,40 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
           <div class="fsec-title">Requerente</div>
           <div class="frow frow-1"><div class="fgrp"><label>Nome / Razão Social</label><input data-path="requerente.nome" placeholder="Ex.: Instituto Viver em Transformação"></div></div>
           <div class="frow frow-2">
-            <div class="fgrp"><label>CNPJ / CPF</label><input data-path="requerente.cnpj" placeholder="00.000.000/0000-00"></div>
+            <div class="fgrp"><label>CNPJ / CPF</label><input data-path="requerente.cnpj" id="cnpj-req" placeholder="XX.XXX.XXX/XXXX-XX" oninput="maskCpfCnpj(this)"></div>
             <div class="fgrp"><label>Responsável</label><input data-path="requerente.responsavel" placeholder="Nome do responsável"></div>
           </div>
-          <div class="frow frow-1"><div class="fgrp"><label>Endereço</label><input data-path="requerente.endereco" placeholder="Rua, número, bairro"></div></div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Cargo do Responsável</label><input data-path="requerente.cargoResponsavel" placeholder="Ex.: Diretor, Presidente"></div>
+            <div class="fgrp"><label>E-mail do Responsável</label><input data-path="requerente.emailResponsavel" type="email" placeholder="responsavel@email.com.br"></div>
+          </div>
+          <div class="frow frow-2" style="grid-template-columns:2fr 1fr;">
+            <div class="fgrp"><label>Logradouro</label><input data-path="requerente.rua" placeholder="Rua, Av., Travessa..."></div>
+            <div class="fgrp"><label>Número</label><input data-path="requerente.numero" placeholder="Nº"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Bairro</label><input data-path="requerente.bairro" placeholder="Bairro"></div>
+            <div class="fgrp"><label>Complemento</label><input data-path="requerente.complemento" placeholder="Apto, Sala, Bloco..."></div>
+          </div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>Estado (UF)</label>
+              <select data-path="requerente.uf" id="uf-select-req" onchange="onUfReqChange(this.value)">
+                <option value="">Selecione...</option>
+                <option value="AC">Acre</option><option value="AL">Alagoas</option><option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option><option value="BA">Bahia</option><option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option><option value="MA">Maranhão</option><option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option><option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option><option value="PB">Paraíba</option><option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option><option value="PI">Piauí</option><option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option><option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option><option value="RR">Roraima</option><option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
+              </select>
+            </div>
+            <div class="fgrp"><label>CEP</label><input data-path="requerente.cep" id="cep-req" placeholder="00000-000" oninput="maskCep(this)" onblur="fetchCepReq(this.value)"></div>
+            <div class="fgrp"><label>Município</label><input data-path="requerente.municipio" id="municipio-req" placeholder="Preenchido pelo CEP"></div>
+          </div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Telefone</label><input data-path="requerente.telefone" placeholder="(00) 00000-0000"></div>
             <div class="fgrp"><label>E-mail</label><input data-path="requerente.email" type="email" placeholder="email@dominio.com.br"></div>
@@ -259,9 +289,13 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
             <div class="fgrp"><label>Responsável Técnico (RT)</label><input data-path="siagas.responsavelTecnico" placeholder="Nome do engenheiro/geólogo"></div>
           </div>
           <div class="frow frow-3">
-            <div class="fgrp"><label>CREA / CRG</label><input data-path="siagas.crea" placeholder="CREA-MT 000000"></div>
+            <div class="fgrp"><label>CREA / CRG</label><input data-path="siagas.crea" placeholder="CREA-UF 000000"></div>
             <div class="fgrp"><label>Data Início</label><input data-path="poco.dataInicio" type="date"></div>
             <div class="fgrp"><label>Data Término</label><input data-path="poco.dataTermino" type="date"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>E-mail do Responsável Técnico</label><input data-path="siagas.emailResponsavel" type="email" placeholder="rt@empresa.com.br"></div>
+            <div class="fgrp"><label>Telefone do Responsável Técnico</label><input data-path="siagas.telefoneResponsavel" placeholder="(00) 00000-0000"></div>
           </div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Método de Perfuração</label>
@@ -301,8 +335,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
               </select>
             </div>
           </div>
-          <div class="frow frow-2">
-            <div class="fgrp"><label>Município</label><input data-path="requerente.municipio" placeholder="Várzea Grande"></div>
+          <div class="frow frow-3">
             <div class="fgrp"><label>Estado (UF)</label>
               <select data-path="requerente.uf" id="uf-select">
                 <option value="">Selecione...</option>
@@ -318,27 +351,68 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
                 <option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
               </select>
             </div>
+            <div class="fgrp"><label>CEP do Poço</label><input data-path="poco.cep" id="cep-poco" placeholder="00000-000" oninput="maskCep(this)" onblur="fetchCepPoco(this.value)"></div>
+            <div class="fgrp"><label>Município</label><input data-path="requerente.municipio" id="municipio-poco" placeholder="Preenchido pelo CEP"></div>
           </div>
-          <div class="frow frow-1"><div class="fgrp"><label>Logradouro / Localidade</label><input data-path="poco.localidade" placeholder="Endereço ou localidade do poço"></div></div>
-          <div class="frow frow-1"><div class="fgrp"><label>Proprietário do Terreno</label><input data-path="poco.proprietario" placeholder="Nome do proprietário (se diferente do requerente)"></div></div>
+          <div class="frow frow-2" style="grid-template-columns:2fr 1fr;">
+            <div class="fgrp"><label>Logradouro</label><input data-path="poco.rua" placeholder="Rua, Av., rodovia, localidade..."></div>
+            <div class="fgrp"><label>Número</label><input data-path="poco.numero" placeholder="Nº / s/n"></div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Bairro / Localidade</label><input data-path="poco.bairro" placeholder="Bairro ou localidade rural"></div>
+            <div class="fgrp"><label>Complemento</label><input data-path="poco.complemento" placeholder="Fazenda, sítio, gleba..."></div>
+          </div>
         </div>
 
         <div class="fsec">
           <div class="fsec-title">Coordenadas Geográficas</div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Datum</label>
-              <select data-path="poco.datum">
+              <select data-path="poco.datum" id="datum-select" onchange="onDatumChange(this.value)">
                 <option value="SIRGAS2000">SIRGAS 2000</option>
                 <option value="WGS84">WGS 84</option>
                 <option value="SAD69">SAD 69</option>
-                <option value="CorrentesBR">Corrientes-BR</option>
+                <option value="Outro">Outro</option>
               </select>
             </div>
             <div class="fgrp"><label>Fuso UTM</label><input data-path="poco.fusoUtm" placeholder="Ex.: 21S"></div>
           </div>
-          <div class="frow frow-2">
-            <div class="fgrp"><label>Latitude (DD)</label><input data-path="poco.latitude" placeholder="-15.6500000" step="any" type="number"></div>
-            <div class="fgrp"><label>Longitude (DD)</label><input data-path="poco.longitude" placeholder="-56.1300000" step="any" type="number"></div>
+          <div class="frow frow-1" id="datum-especifique-row" style="display:none;">
+            <div class="fgrp"><label>Especifique o Datum</label><input data-path="poco.datumEspecifique" placeholder="Nome do datum utilizado"></div>
+          </div>
+          <div class="frow frow-1">
+            <div class="fgrp">
+              <label>Latitude (GMS)</label>
+              <div style="display:flex;gap:4px;align-items:center;">
+                <input data-path="poco.latGraus" type="number" min="0" max="90" step="1" placeholder="__°" style="width:60px;text-align:center;" oninput="updateLatDd()">
+                <span style="font-weight:700;color:var(--text2);">°</span>
+                <input data-path="poco.latMin" type="number" min="0" max="59" step="1" placeholder="__'" style="width:60px;text-align:center;" oninput="updateLatDd()">
+                <span style="font-weight:700;color:var(--text2);">'</span>
+                <input data-path="poco.latSeg" type="number" min="0" max="59.99" step="0.01" placeholder='__."' style="width:75px;text-align:center;" oninput="updateLatDd()">
+                <span style="font-weight:700;color:var(--text2);">"</span>
+                <select data-path="poco.latDir" style="width:58px;" onchange="updateLatDd()">
+                  <option value="S">S</option>
+                  <option value="N">N</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="frow frow-1">
+            <div class="fgrp">
+              <label>Longitude (GMS)</label>
+              <div style="display:flex;gap:4px;align-items:center;">
+                <input data-path="poco.lonGraus" type="number" min="0" max="180" step="1" placeholder="__°" style="width:60px;text-align:center;" oninput="updateLonDd()">
+                <span style="font-weight:700;color:var(--text2);">°</span>
+                <input data-path="poco.lonMin" type="number" min="0" max="59" step="1" placeholder="__'" style="width:60px;text-align:center;" oninput="updateLonDd()">
+                <span style="font-weight:700;color:var(--text2);">'</span>
+                <input data-path="poco.lonSeg" type="number" min="0" max="59.99" step="0.01" placeholder='__."' style="width:75px;text-align:center;" oninput="updateLonDd()">
+                <span style="font-weight:700;color:var(--text2);">"</span>
+                <select data-path="poco.lonDir" style="width:58px;" onchange="updateLonDd()">
+                  <option value="O">O</option>
+                  <option value="L">L</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Coord. E (UTM)</label><input data-path="poco.coordE" placeholder="Ex.: 590000"></div>
@@ -355,18 +429,20 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
           <div id="outorga-authority" class="chip chip-blue" style="margin-bottom:8px;"></div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Nº do Processo</label><input data-path="outorga.numeroProcesso" placeholder="000000/0000"></div>
-            <div class="fgrp"><label>Data de Validade</label><input data-path="outorga.dataValidade" type="date"></div>
+            <div class="fgrp"><label>Nº da Autorização de Perfuração</label><input data-path="outorga.numAutorizacaoPerfuracao" placeholder="Nº da autorização"></div>
           </div>
           <div class="frow frow-2">
-            <div class="fgrp"><label>Nº CNARH</label><input data-path="outorga.numeroCnarh" placeholder="Código CNARH"></div>
-            <div class="fgrp"><label>Tipo de Outorga</label>
+            <div class="fgrp"><label>Data da Perfuração</label><input data-path="outorga.dataPerfuracao" type="date"></div>
+            <div class="fgrp"><label>Tipo</label>
               <select data-path="outorga.tipo">
-                <option value="declaracao_uso">Declaração de Uso Insignificante</option>
-                <option value="outorga_preventiva">Outorga Preventiva</option>
-                <option value="outorga_direito">Outorga de Direito de Uso</option>
-                <option value="regularizacao">Regularização</option>
+                <option value="captacao_insignificante">Cadastro de Captação Insignificante</option>
+                <option value="outorga">Outorga</option>
               </select>
             </div>
+          </div>
+          <div class="frow frow-2">
+            <div class="fgrp"><label>Portaria de Outorga</label><input data-path="outorga.portaria" placeholder="Ex.: Portaria nº 000/0000"></div>
+            <div class="fgrp"><label>Data de Validade</label><input data-path="outorga.dataValidade" type="date"></div>
           </div>
           <div class="frow frow-1"><div class="fgrp"><label>Observações sobre a Outorga</label><textarea data-path="outorga.obs" placeholder="Legislação estadual aplicável, condicionantes, etc."></textarea></div></div>
         </div>
@@ -376,17 +452,16 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
       <div class="tab-panel" id="tab-const">
         <div class="fsec">
           <div class="fsec-title">Profundidade Total</div>
-          <div class="frow frow-2">
+          <div class="frow frow-1">
             <div class="fgrp">
               <label>Profundidade Total (m)</label>
               <input data-path="poco.profundidadeTotal" type="number" min="5" max="5000" placeholder="100">
             </div>
-            <div class="fgrp"><label>Diâmetro Final</label><input data-path="poco.diametroFinal" placeholder='Ex.: 6.1/8"'></div>
           </div>
         </div>
 
         <div class="fsec">
-          <div class="fsec-title">5 · Laje de Proteção Sanitária</div>
+          <div class="fsec-title">Laje de Proteção Sanitária</div>
           <div class="frow frow-3">
             <div class="fgrp"><label>Espessura (m)</label><input data-path="construtivo.laje.espessura" type="number" step="0.01" placeholder="0.10"></div>
             <div class="fgrp"><label>Largura (m)</label><input data-path="construtivo.laje.largura" type="number" step="0.1" placeholder="1.0"></div>
@@ -396,7 +471,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
         </div>
 
         <div class="fsec">
-          <div class="fsec-title">6 · Perfuração – Fase 1</div>
+          <div class="fsec-title">Perfuração – Fase 1</div>
           <div class="frow frow-3">
             <div class="fgrp"><label>Diâmetro (bit)</label><input data-path="construtivo.perfuracao1.diametro" placeholder='8.1/2"'></div>
             <div class="fgrp"><label>De (m)</label><input data-path="construtivo.perfuracao1.de" type="number" placeholder="0" min="0"></div>
@@ -405,7 +480,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
         </div>
 
         <div class="fsec">
-          <div class="fsec-title">7 · Cimentação</div>
+          <div class="fsec-title">Cimentação</div>
           <div class="frow frow-3">
             <div class="fgrp"><label>Tipo de Cimento</label><input data-path="construtivo.cimentacao.tipo" placeholder="Ex.: Portland CP-II-32"></div>
             <div class="fgrp"><label>De (m)</label><input data-path="construtivo.cimentacao.de" type="number" placeholder="0" min="0"></div>
@@ -415,13 +490,13 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
         </div>
 
         <div class="fsec">
-          <div class="fsec-title">8 · Revestimento – Fase 1</div>
+          <div class="fsec-title">Revestimento – Fase 1</div>
           <div class="frow frow-3">
             <div class="fgrp"><label>Diâmetro (Ø)</label><input data-path="construtivo.revestimento.diametro" placeholder='6"'></div>
             <div class="fgrp"><label>De (m)</label><input data-path="construtivo.revestimento.de" type="number" placeholder="0" min="0"></div>
             <div class="fgrp"><label>Até (m)</label><input data-path="construtivo.revestimento.ate" type="number" placeholder="40" min="0"></div>
           </div>
-          <div class="frow frow-2">
+          <div class="frow frow-1">
             <div class="fgrp"><label>Material (NBR 13604)</label>
               <select data-path="construtivo.revestimento.material">
                 <option value="pvc_tigre">PVC Tigre / CRPVC</option>
@@ -431,12 +506,11 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
                 <option value="fibra">Fibra de Vidro</option>
               </select>
             </div>
-            <div class="fgrp"><label>Espessura de Parede (mm)</label><input data-path="construtivo.revestimento.espessuraParede" placeholder="Ex.: 7.5"></div>
           </div>
         </div>
 
         <div class="fsec">
-          <div class="fsec-title">9 · Perfuração – Fase 2</div>
+          <div class="fsec-title">Perfuração – Fase 2</div>
           <div class="frow frow-3">
             <div class="fgrp"><label>Diâmetro (bit)</label><input data-path="construtivo.perfuracao2.diametro" placeholder='6.1/8"'></div>
             <div class="fgrp"><label>De (m)</label><input data-path="construtivo.perfuracao2.de" type="number" placeholder="40" min="0"></div>
@@ -451,7 +525,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
         </div>
 
         <div class="fsec">
-          <div class="fsec-title">10 · Tubulação Edutora & 11 · Bomba Submersa</div>
+          <div class="fsec-title">Tubulação Edutora &amp; Bomba Submersa</div>
           <div class="frow frow-3">
             <div class="fgrp"><label>Ø Tubulação Edutora</label><input data-path="construtivo.bomba.diametroEdutora" placeholder='Ex.: 2"'></div>
             <div class="fgrp"><label>Profundidade Bomba (m)</label><input data-path="construtivo.bomba.profundidade" type="number" placeholder="80" min="0"></div>
@@ -637,21 +711,41 @@ const defaultState = {
     nome: 'INSTITUTO VIVER EM TRANSFORMAÇÃO',
     cnpj: '24.648.916/0001-10',
     responsavel: '',
+    cargoResponsavel: '',
+    emailResponsavel: '',
+    rua: '',
+    numero: '',
+    bairro: '',
+    complemento: '',
     endereco: '',
     municipio: 'Várzea Grande',
     uf: 'MT',
+    cep: '',
     telefone: '',
     email: ''
   },
   poco: {
     codigo: 'PT01, 02 e 03',
     profundidadeTotal: 100,
-    diametroFinal: '6.1/8"',
     finalidade: 'abastecimento_humano',
+    rua: '',
+    numero: '',
+    bairro: '',
+    complemento: '',
     localidade: '',
     proprietario: '',
+    cep: '',
     datum: 'SIRGAS2000',
+    datumEspecifique: '',
     fusoUtm: '21S',
+    latGraus: '',
+    latMin: '',
+    latSeg: '',
+    latDir: 'S',
+    lonGraus: '',
+    lonMin: '',
+    lonSeg: '',
+    lonDir: 'O',
     latitude: '',
     longitude: '',
     coordE: '',
@@ -702,9 +796,11 @@ const defaultState = {
   },
   outorga: {
     numeroProcesso: '',
+    numAutorizacaoPerfuracao: '',
+    dataPerfuracao: '',
+    portaria: '',
     dataValidade: '',
-    numeroCnarh: '',
-    tipo: 'outorga_direito',
+    tipo: 'captacao_insignificante',
     vazaoOutorgada: '',
     volumeDiario: '',
     volumeAnual: '',
@@ -720,7 +816,9 @@ const defaultState = {
     cnpjEmpresa: '',
     responsavelTecnico: '',
     crea: '',
-    artNumero: ''
+    artNumero: '',
+    emailResponsavel: '',
+    telefoneResponsavel: ''
   }
 };
 
@@ -1362,7 +1460,7 @@ async function generatePDF() {
         ['5','Laje proteção sanitária', `Esp.:${v('construtivo.laje.espessura')}m / ${v('construtivo.laje.largura')}m×${v('construtivo.laje.comprimento')}m / ${v('construtivo.laje.material')}`, 'NBR 12244'],
         ['6','Perfuração Fase 1', `Ø${v('construtivo.perfuracao1.diametro')} de ${v('construtivo.perfuracao1.de')}m a ${v('construtivo.perfuracao1.ate')}m`, 'NBR 12212'],
         ['7','Cimentação', `${v('construtivo.cimentacao.tipo')} / de ${v('construtivo.cimentacao.de')}m a ${v('construtivo.cimentacao.ate')}m / Traço: ${v('construtivo.cimentacao.traco')}`, 'NBR 12244'],
-        ['8','Revestimento Fase 1', `Ø${v('construtivo.revestimento.diametro')} / de ${v('construtivo.revestimento.de')}m a ${v('construtivo.revestimento.ate')}m / ${v('construtivo.revestimento.material')} / e=${v('construtivo.revestimento.espessuraParede')}mm`, 'NBR 13604'],
+        ['8','Revestimento Fase 1', `Ø${v('construtivo.revestimento.diametro')} / de ${v('construtivo.revestimento.de')}m a ${v('construtivo.revestimento.ate')}m / ${v('construtivo.revestimento.material')}`, 'NBR 13604'],
         ['9','Perfuração Fase 2', `Ø${v('construtivo.perfuracao2.diametro')} de ${v('construtivo.perfuracao2.de')}m a ${v('construtivo.perfuracao2.ate')}m`, 'NBR 12212'],
         ['10','Tubulação Edutora', `Ø${v('construtivo.bomba.diametroEdutora')} / ${v('construtivo.bomba.materialEdutora')}`, 'NBR 12244'],
         ['11','Bomba Submersa', `Prof.:${v('construtivo.bomba.profundidade')}m / ${v('construtivo.bomba.modelo')} / ${v('construtivo.bomba.potencia')} / ${v('construtivo.bomba.vazaoBomba')}m³/h`, 'NBR 12244'],
@@ -1415,9 +1513,10 @@ async function generatePDF() {
     y = drawTable(
       ['Parâmetro','Valor','Parâmetro','Valor'],
       [
-        ['Órgão Gestor', outorgaAuthority(uf)+'/'+uf, 'Tipo Outorga', v('outorga.tipo','—').replace(/_/g,' ')],
-        ['Nº Processo', v('outorga.numeroProcesso','—'), 'Data Validade', fmtDate(v('outorga.dataValidade'))],
-        ['Nº CNARH', v('outorga.numeroCnarh','—'), 'Uso da Água', v('hidrogeologia.usoAgua','—').replace(/_/g,' ')],
+        ['Órgão Gestor', outorgaAuthority(uf)+'/'+uf, 'Tipo', v('outorga.tipo','—') === 'captacao_insignificante' ? 'Cadastro Captação Insignificante' : v('outorga.tipo','—')],
+        ['Nº Processo', v('outorga.numeroProcesso','—'), 'Nº Autorização Perfuração', v('outorga.numAutorizacaoPerfuracao','—')],
+        ['Data da Perfuração', fmtDate(v('outorga.dataPerfuracao')), 'Portaria de Outorga', v('outorga.portaria','—')],
+        ['Data Validade', fmtDate(v('outorga.dataValidade')), 'Uso da Água', v('hidrogeologia.usoAgua','—').replace(/_/g,' ')],
         ['Vazão Outorgada (m³/h)', v('outorga.vazaoOutorgada','—'), 'Volume Diário (m³/dia)', v('outorga.volumeDiario','—')],
         ['Volume Anual (m³/ano)', v('outorga.volumeAnual','—'), 'Horas Bombeamento/dia', v('outorga.horasBombeamento','—')],
       ],
@@ -1756,6 +1855,136 @@ function saveToast() {
 // ============================================================
 // INIT
 // ============================================================
+// ============================================================
+// CNPJ / CPF MASK
+// ============================================================
+function maskCpfCnpj(el) {
+  let v = el.value.replace(/\D/g, '');
+  if (v.length <= 11) {
+    // CPF: 000.000.000-00
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  } else {
+    // CNPJ: 00.000.000/0000-00
+    v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+    v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+  }
+  el.value = v;
+  const path = el.getAttribute('data-path');
+  if (path) { setPath(state, path, v); saveState(); }
+}
+
+// ============================================================
+// CEP MASK & LOOKUP
+// ============================================================
+function maskCep(el) {
+  let v = el.value.replace(/\D/g, '').slice(0, 8);
+  if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
+  el.value = v;
+  const path = el.getAttribute('data-path');
+  if (path) { setPath(state, path, v); saveState(); }
+}
+
+async function fetchCepReq(cep) {
+  const digits = cep.replace(/\D/g, '');
+  if (digits.length !== 8) return;
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+    const d = await r.json();
+    if (!d.erro) {
+      // Fill requerente fields
+      if (!getPath(state, 'requerente.rua') && d.logradouro) {
+        setPath(state, 'requerente.rua', d.logradouro);
+        document.querySelector('[data-path="requerente.rua"]').value = d.logradouro;
+      }
+      if (d.bairro) { setPath(state, 'requerente.bairro', d.bairro); document.querySelector('[data-path="requerente.bairro"]').value = d.bairro; }
+      if (d.localidade) {
+        setPath(state, 'requerente.municipio', d.localidade);
+        document.querySelectorAll('[data-path="requerente.municipio"]').forEach(el => el.value = d.localidade);
+      }
+      if (d.uf) {
+        setPath(state, 'requerente.uf', d.uf);
+        document.querySelectorAll('[data-path="requerente.uf"]').forEach(el => el.value = d.uf);
+        updateOutorgaAuthority();
+      }
+      saveState();
+      showToast('📍 Endereço preenchido pelo CEP!');
+    }
+  } catch(e) {}
+}
+
+async function fetchCepPoco(cep) {
+  const digits = cep.replace(/\D/g, '');
+  if (digits.length !== 8) return;
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+    const d = await r.json();
+    if (!d.erro) {
+      if (d.logradouro && !getPath(state, 'poco.rua')) {
+        setPath(state, 'poco.rua', d.logradouro);
+        document.querySelector('[data-path="poco.rua"]').value = d.logradouro;
+      }
+      if (d.bairro) { setPath(state, 'poco.bairro', d.bairro); document.querySelector('[data-path="poco.bairro"]').value = d.bairro; }
+      if (d.localidade) {
+        setPath(state, 'requerente.municipio', d.localidade);
+        document.querySelectorAll('[data-path="requerente.municipio"]').forEach(el => el.value = d.localidade);
+      }
+      if (d.uf) {
+        setPath(state, 'requerente.uf', d.uf);
+        document.querySelectorAll('[data-path="requerente.uf"]').forEach(el => el.value = d.uf);
+        updateOutorgaAuthority();
+      }
+      saveState();
+      showToast('📍 Localização do poço preenchida pelo CEP!');
+    }
+  } catch(e) {}
+}
+
+// ============================================================
+// DATUM CONDICIONAL
+// ============================================================
+function onDatumChange(val) {
+  const row = document.getElementById('datum-especifique-row');
+  if (row) row.style.display = val === 'Outro' ? '' : 'none';
+}
+
+// ============================================================
+// UF change (Tab 1 requerente select)
+// ============================================================
+function onUfReqChange(val) {
+  setPath(state, 'requerente.uf', val);
+  // sync the other UF select in Tab 2
+  const sel2 = document.getElementById('uf-select');
+  if (sel2) sel2.value = val;
+  saveState();
+  updateOutorgaAuthority();
+}
+
+// ============================================================
+// GMS COORDINATES → DD
+// ============================================================
+function updateLatDd() {
+  const g = parseFloat(document.querySelector('[data-path="poco.latGraus"]')?.value) || 0;
+  const m = parseFloat(document.querySelector('[data-path="poco.latMin"]')?.value) || 0;
+  const s = parseFloat(document.querySelector('[data-path="poco.latSeg"]')?.value) || 0;
+  const dir = document.querySelector('[data-path="poco.latDir"]')?.value || 'S';
+  const dd = (g + m/60 + s/3600) * (dir === 'S' ? -1 : 1);
+  setPath(state, 'poco.latitude', dd ? dd.toFixed(7) : '');
+  saveState();
+}
+function updateLonDd() {
+  const g = parseFloat(document.querySelector('[data-path="poco.lonGraus"]')?.value) || 0;
+  const m = parseFloat(document.querySelector('[data-path="poco.lonMin"]')?.value) || 0;
+  const s = parseFloat(document.querySelector('[data-path="poco.lonSeg"]')?.value) || 0;
+  const dir = document.querySelector('[data-path="poco.lonDir"]')?.value || 'O';
+  const dd = (g + m/60 + s/3600) * (dir === 'O' ? -1 : 1);
+  setPath(state, 'poco.longitude', dd ? dd.toFixed(7) : '');
+  saveState();
+}
+
 function init() {
   bindInputs();
   renderFiltros();
@@ -1770,8 +1999,17 @@ function init() {
     saveTimeout = setTimeout(saveState, 800);
   });
 
-  // Listen for UF change to update authority
-  document.getElementById('uf-select').addEventListener('change', updateOutorgaAuthority);
+  // Listen for UF change to update authority (Tab 2 select)
+  const ufSel = document.getElementById('uf-select');
+  if (ufSel) ufSel.addEventListener('change', function() {
+    const sel1 = document.getElementById('uf-select-req');
+    if (sel1) sel1.value = this.value;
+    updateOutorgaAuthority();
+  });
+
+  // Init datum conditional visibility
+  const datumSel = document.getElementById('datum-select');
+  if (datumSel) onDatumChange(datumSel.value);
 }
 
 init();
