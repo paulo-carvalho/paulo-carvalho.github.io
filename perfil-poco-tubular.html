@@ -248,6 +248,9 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
             <div class="fgrp"><label>Cargo do Responsável</label><input data-path="requerente.cargoResponsavel" placeholder="Ex.: Diretor, Presidente"></div>
             <div class="fgrp"><label>E-mail do Responsável</label><input data-path="requerente.emailResponsavel" type="email" placeholder="responsavel@email.com.br"></div>
           </div>
+          <div class="frow frow-3">
+            <div class="fgrp"><label>CEP</label><input data-path="requerente.cep" id="cep-req" placeholder="00000-000" oninput="maskCep(this)" onblur="fetchCepReq(this.value)"></div>
+          </div>
           <div class="frow frow-2" style="grid-template-columns:2fr 1fr;">
             <div class="fgrp"><label>Logradouro</label><input data-path="requerente.rua" placeholder="Rua, Av., Travessa..."></div>
             <div class="fgrp"><label>Número</label><input data-path="requerente.numero" placeholder="Nº"></div>
@@ -256,7 +259,8 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
             <div class="fgrp"><label>Bairro</label><input data-path="requerente.bairro" placeholder="Bairro"></div>
             <div class="fgrp"><label>Complemento</label><input data-path="requerente.complemento" placeholder="Apto, Sala, Bloco..."></div>
           </div>
-          <div class="frow frow-3">
+          <div class="frow frow-3" style="grid-template-columns:2fr 1fr;">
+			<div class="fgrp"><label>Município</label><input data-path="requerente.municipio" id="municipio-req" placeholder="Preenchido pelo CEP"></div>
             <div class="fgrp"><label>Estado (UF)</label>
               <select data-path="requerente.uf" id="uf-select-req" onchange="onUfReqChange(this.value)">
                 <option value="">Selecione...</option>
@@ -272,8 +276,6 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
                 <option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
               </select>
             </div>
-            <div class="fgrp"><label>CEP</label><input data-path="requerente.cep" id="cep-req" placeholder="00000-000" oninput="maskCep(this)" onblur="fetchCepReq(this.value)"></div>
-            <div class="fgrp"><label>Município</label><input data-path="requerente.municipio" id="municipio-req" placeholder="Preenchido pelo CEP"></div>
           </div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Telefone</label><input data-path="requerente.telefone" placeholder="(00) 00000-0000"></div>
@@ -1859,18 +1861,21 @@ function saveToast() {
 // CNPJ / CPF MASK
 // ============================================================
 function maskCpfCnpj(el) {
-  let v = el.value.replace(/\D/g, '');
-  if (v.length <= 11) {
+  const d = el.value.replace(/\D/g, '').slice(0, 14);
+  let v = '';
+  if (d.length <= 11) {
     // CPF: 000.000.000-00
-    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    if      (d.length <= 3)  v = d;
+    else if (d.length <= 6)  v = d.slice(0,3) + '.' + d.slice(3);
+    else if (d.length <= 9)  v = d.slice(0,3) + '.' + d.slice(3,6) + '.' + d.slice(6);
+    else                     v = d.slice(0,3) + '.' + d.slice(3,6) + '.' + d.slice(6,9) + '-' + d.slice(9);
   } else {
     // CNPJ: 00.000.000/0000-00
-    v = v.replace(/^(\d{2})(\d)/, '$1.$2');
-    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-    v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
-    v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+    if      (d.length <= 2)  v = d;
+    else if (d.length <= 5)  v = d.slice(0,2) + '.' + d.slice(2);
+    else if (d.length <= 8)  v = d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5);
+    else if (d.length <= 12) v = d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5,8) + '/' + d.slice(8);
+    else                     v = d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5,8) + '/' + d.slice(8,12) + '-' + d.slice(12);
   }
   el.value = v;
   const path = el.getAttribute('data-path');
