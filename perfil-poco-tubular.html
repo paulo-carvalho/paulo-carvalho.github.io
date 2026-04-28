@@ -278,7 +278,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
             </div>
           </div>
           <div class="frow frow-2">
-            <div class="fgrp"><label>Telefone</label><input data-path="requerente.telefone" placeholder="(00) 00000-0000"></div>
+            <div class="fgrp"><label>Telefone</label><input data-path="requerente.telefone" placeholder="(00) 00000-0000" oninput="maskTelefone(this)"></div>
             <div class="fgrp"><label>E-mail</label><input data-path="requerente.email" type="email" placeholder="email@dominio.com.br"></div>
           </div>
         </div>
@@ -297,7 +297,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
           </div>
           <div class="frow frow-2">
             <div class="fgrp"><label>E-mail do Responsável Técnico</label><input data-path="siagas.emailResponsavel" type="email" placeholder="rt@empresa.com.br"></div>
-            <div class="fgrp"><label>Telefone do Responsável Técnico</label><input data-path="siagas.telefoneResponsavel" placeholder="(00) 00000-0000"></div>
+            <div class="fgrp"><label>Telefone do Responsável Técnico</label><input data-path="siagas.telefoneResponsavel" placeholder="(00) 00000-0000" oninput="maskTelefone(this)"></div>
           </div>
           <div class="frow frow-2">
             <div class="fgrp"><label>Método de Perfuração</label>
@@ -338,6 +338,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
             </div>
           </div>
           <div class="frow frow-3">
+			<div class="fgrp"><label>CEP do Poço</label><input data-path="poco.cep" id="cep-poco" placeholder="00000-000" oninput="maskCep(this)" onblur="fetchCepPoco(this.value)"></div>
             <div class="fgrp"><label>Estado (UF)</label>
               <select data-path="requerente.uf" id="uf-select">
                 <option value="">Selecione...</option>
@@ -353,7 +354,6 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
                 <option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
               </select>
             </div>
-            <div class="fgrp"><label>CEP do Poço</label><input data-path="poco.cep" id="cep-poco" placeholder="00000-000" oninput="maskCep(this)" onblur="fetchCepPoco(this.value)"></div>
             <div class="fgrp"><label>Município</label><input data-path="requerente.municipio" id="municipio-poco" placeholder="Preenchido pelo CEP"></div>
           </div>
           <div class="frow frow-2" style="grid-template-columns:2fr 1fr;">
@@ -1883,6 +1883,22 @@ function maskCpfCnpj(el) {
 }
 
 // ============================================================
+// TELEFONE MASK  →  (00) 00000-0000  /  (00) 0000-0000
+// ============================================================
+function maskTelefone(el) {
+  const d = el.value.replace(/\D/g, '').slice(0, 11);
+  let v = '';
+  if      (d.length === 0)  v = '';
+  else if (d.length <= 2)   v = '(' + d;
+  else if (d.length <= 6)   v = '(' + d.slice(0,2) + ') ' + d.slice(2);
+  else if (d.length <= 10)  v = '(' + d.slice(0,2) + ') ' + d.slice(2,6) + '-' + d.slice(6);   // fixo
+  else                      v = '(' + d.slice(0,2) + ') ' + d.slice(2,7) + '-' + d.slice(7);   // celular
+  el.value = v;
+  const path = el.getAttribute('data-path');
+  if (path) { setPath(state, path, v); saveState(); }
+}
+
+// ============================================================
 // CEP MASK & LOOKUP
 // ============================================================
 function maskCep(el) {
@@ -1900,7 +1916,6 @@ async function fetchCepReq(cep) {
     const r = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
     const d = await r.json();
     if (!d.erro) {
-      // Fill requerente fields
       if (!getPath(state, 'requerente.rua') && d.logradouro) {
         setPath(state, 'requerente.rua', d.logradouro);
         document.querySelector('[data-path="requerente.rua"]').value = d.logradouro;
@@ -1917,8 +1932,10 @@ async function fetchCepReq(cep) {
       }
       saveState();
       showToast('📍 Endereço preenchido pelo CEP!');
+    }  else {
+      showToast('⚠️ CEP não encontrado.');
     }
-  } catch(e) {}
+  } catch(e) { showToast('⚠️ Erro ao buscar CEP.'); }
 }
 
 async function fetchCepPoco(cep) {
@@ -1928,11 +1945,14 @@ async function fetchCepPoco(cep) {
     const r = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
     const d = await r.json();
     if (!d.erro) {
-      if (d.logradouro && !getPath(state, 'poco.rua')) {
+      if (d.logradouro) {
         setPath(state, 'poco.rua', d.logradouro);
         document.querySelector('[data-path="poco.rua"]').value = d.logradouro;
       }
-      if (d.bairro) { setPath(state, 'poco.bairro', d.bairro); document.querySelector('[data-path="poco.bairro"]').value = d.bairro; }
+      if (d.bairro) {
+        setPath(state, 'poco.bairro', d.bairro);
+        document.querySelector('[data-path="poco.bairro"]').value = d.bairro;
+      }
       if (d.localidade) {
         setPath(state, 'requerente.municipio', d.localidade);
         document.querySelectorAll('[data-path="requerente.municipio"]').forEach(el => el.value = d.localidade);
@@ -1944,8 +1964,10 @@ async function fetchCepPoco(cep) {
       }
       saveState();
       showToast('📍 Localização do poço preenchida pelo CEP!');
+    } else {
+      showToast('⚠️ CEP não encontrado.');
     }
-  } catch(e) {}
+  } catch(e) { showToast('⚠️ Erro ao buscar CEP.'); }
 }
 
 // ============================================================
