@@ -287,7 +287,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-seri
           <div class="fsec-title">Empresa Executora</div>
           <div class="frow frow-1"><div class="fgrp"><label>Empresa Perfuradora</label><input data-path="siagas.empresaPerfuradora" placeholder="Razão social da empresa"></div></div>
           <div class="frow frow-2">
-            <div class="fgrp"><label>CNPJ da Empresa</label><input data-path="siagas.cnpjEmpresa" placeholder="00.000.000/0000-00"></div>
+            <div class="fgrp"><label>CNPJ da Empresa</label><input data-path="siagas.cnpjEmpresa" placeholder="00.000.000/0000-00" oninput="maskCpfCnpj(this)"></div>
             <div class="fgrp"><label>Responsável Técnico (RT)</label><input data-path="siagas.responsavelTecnico" placeholder="Nome do engenheiro/geólogo"></div>
           </div>
           <div class="frow frow-3">
